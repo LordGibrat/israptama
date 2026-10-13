@@ -2,7 +2,7 @@
 
 [![Tests](https://github.com/LordGibrat/israptama/actions/workflows/tests.yml/badge.svg)](https://github.com/LordGibrat/israptama/actions/workflows/tests.yml)
 
-An AI-assisted decision-support prototype for small bakeries in Kazakhstan. It forecasts sales, recommends daily baking quantities, and compares the financial tradeoff between unsold stock and unmet demand. The interface is in Kazakh; the documentation is in English.
+An AI-assisted decision-support prototype for small bakeries in Kazakhstan. It forecasts sales, recommends daily baking quantities, and makes the tradeoff between unsold stock and unmet demand visible. The interface is in Kazakh; the documentation is in English.
 
 **Status:** working local prototype, evaluated on synthetic data only. No real bakery pilot or verified savings yet.
 
@@ -11,6 +11,16 @@ An AI-assisted decision-support prototype for small bakeries in Kazakhstan. It f
 ![Israptama bakery planning dashboard](preview-desktop.png)
 
 Independent student project inspired by the publicly described Afresh workflow: sales history → demand forecast → production recommendation → business evaluation. No affiliation with Afresh and no access to its code, models, or customer data.
+
+## What the prototype demonstrates
+
+- A Kazakh-language production-planning dashboard.
+- Product-level Ridge regression with weekday, trend, last-week, and rolling-seven-day features.
+- Cost-sensitive quantity recommendations with an optional 0–20% safety-stock adjustment.
+- A 21-day walk-forward evaluation against a last-week same-day baseline.
+- A transparent comparison of forecast error, simulated contribution profit, and unsold units.
+- CSV upload, plan download, JSON evaluation export, and a reproducible synthetic dataset.
+- Local-only processing with no account, telemetry, external API, or uploaded-file persistence.
 
 ## Quick start
 
@@ -57,17 +67,6 @@ On another computer: install Python 3.11+ and run:
 python -m pip install -r requirements.txt
 python app.py
 ```
-
-## What works
-
-- Kazakh dashboard: plan, evaluation, data upload, and methodology.
-- Bakery editorial design inspired by researched Lapa Ninja/Awwwards references: flour-cream and terracotta palette, serif typography, original SVG products, and responsive navigation. See `DESIGN.md` for reference attribution; no third-party artwork is copied.
-- Seeded synthetic sample: 112 days, 336 records, croissants, bread, samsa; ending 2026-10-12. These fixed dates make the experiment reproducible. “Tomorrow” means the day after the dataset, not automatically today's actual date.
-- Product-level NumPy Ridge regression using weekday, linear trend, last-week sales, and previous-seven-day mean. No LLM/API service is used.
-- Cost-sensitive recommended quantity using `(price-cost)/price` quantile of held-out residuals; optional 0–20% extra stock.
-- Last-21-day walk-forward evaluation versus last week's same-day SALES (not last week's production).
-- CSV upload, production-plan download, JSON evaluation export, sample reset.
-- No account, external APIs, telemetry, or uploaded-file persistence. CSV is held in browser memory and processed by the local server. Source code and test results are included.
 
 ## CSV input
 
