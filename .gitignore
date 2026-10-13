@@ -1,0 +1,16 @@
+__pycache__/
+*.pyc
+.venv/
+.env
+.env.*
+!.env.example
+*.log
+.DS_Store
+Thumbs.db
+.idea/
+.vscode/
+.playwright-mcp/
+work/
+*.zip
+# Keep synthetic demo data; keep private bakery data outside this repository.
+data/private/

@@ -1,0 +1,68 @@
+<!doctype html>
+<html lang="kk">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Israptama — наубайхана жоспары</title>
+  <link rel="stylesheet" href="/style.css">
+  <link rel="stylesheet" href="/bakery.css">
+  <script src="/app.js" defer></script>
+</head>
+<body>
+  <a class="skip-link" href="#view-plan">Негізгі мазмұнға өту</a>
+  <header class="sidebar">
+    <a class="brand" href="/" aria-label="Israptama басты бет"><span class="brand-mark" aria-hidden="true"><svg viewBox="0 0 40 40" fill="none"><path d="M9 26c-5-6 0-16 11-16s16 10 11 16l-3 4H12z"/><path d="m15 14-2 7m9-8-3 9m10-5-3 7"/></svg></span><span>Israptama<span class="brand-sub">ӘР НАННЫҢ ҚАДІРІ БАР.</span></span></a>
+    <nav aria-label="Негізгі мәзір">
+      <button class="nav-item active" data-view="plan" aria-current="page"><span>▦</span>Пісіру жоспары</button>
+      <button class="nav-item" data-view="evaluation"><span>↗</span>Нәтижелер</button>
+      <button class="nav-item" data-view="data"><span>⇅</span>Деректер</button>
+      <button class="nav-item" data-view="method"><span>◎</span>Әдіс туралы</button>
+    </nav>
+    <div class="workspace"><span class="status-dot"></span><div id="workspace-name">Астана · демо наубайхана<small>Жергілікті режим</small></div></div>
+  </header>
+  <main>
+    <div class="topbar"><span>НАУБАЙХАНА КҮНДЕЛІГІ <span class="slash">/</span> <span id="breadcrumb">Пісіру жоспары</span></span><span class="version">Зерттеу прототипі · v0.1</span></div>
+    <div class="content">
+      <div class="demo-banner"><span class="banner-label" id="source-label">ҮЛГІ ДЕРЕКТЕР</span><span id="source-note">Бұл — жасанды наубайхана. Нәтижелер нақты бизнес үнемін білдірмейді.</span></div>
+      <div id="error" class="error" role="alert" hidden></div>
+      <div id="loading" class="loading" role="status">Деректер талданып жатыр…</div>
+      <section id="view-plan" class="view">
+        <div class="bakery-hero">
+          <div class="hero-copy"><p class="eyebrow"><span class="tiny-spark" aria-hidden="true">✳</span> АЗ ЫСЫРАП. ДӘЛІРЕК ЖОСПАР.</p><h1>Ертеңгі пісіру<br><em>жоспары.</em></h1><p class="hero-description">Дәл жеткілікті пісіріңіз.<br>Әр өнімге — дерекке сүйенген шешім.</p><div class="hero-actions"><button id="download-plan" class="button primary" disabled>Жоспарды жүктеу <span aria-hidden="true">↓</span></button><button class="button text-button" data-open-view="data">Өз деректерімді қосу <span aria-hidden="true">↗</span></button></div></div>
+          <div class="hero-art"><img src="/assets/bakery-tray.svg" width="510" height="300" alt="Табақтағы нан, круассан және самса иллюстрациясы"><div class="craft-stamp" aria-hidden="true"><span>НАУБАЙХАНА</span><strong>✳</strong><span>ҮШІН ЖАСАЛҒАН</span></div></div>
+        </div>
+        <div class="plan-dateline"><p class="muted" id="plan-subtitle">Сатылым тарихына сүйенген өндіріс ұсыныстары.</p><span>КҮНДЕЛІК ЖОСПАР <span aria-hidden="true">↘</span></span></div>
+        <div class="stats" id="plan-stats"></div>
+        <div class="panel production-panel">
+          <div class="panel-header"><div><p class="section-kicker">01 / ӨНДІРІС</p><h2>Өнім бойынша ұсыныс</h2><p class="muted">Шешімді наубайхана иесі бекітеді.</p></div><span class="tag" id="product-count">3 өнім</span></div>
+          <div class="table-wrap"><table><caption class="sr-only">Ертеңгі өнім көлемі мен өндіріс құны</caption><thead><tr><th>Өнім</th><th>Сұраныс болжамы</th><th>Болжам ауқымы*</th><th>Пісіру ұсынысы</th><th>Өндіріс құны</th></tr></thead><tbody id="products"></tbody></table></div>
+          <div class="table-foot">* Бұрынғы қателердің 10–90% квантильдері. Кепілді сенімділік аралығы емес.</div>
+        </div>
+        <div class="lower-grid">
+          <div class="panel chart-panel"><div class="panel-header"><div><h2>Болжам және сұраныс</h2><p class="muted">Соңғы 21 күн · барлық өнімдер</p></div><span class="tag">21 күн</span></div><div class="legend"><span><i class="dot actual"></i><span id="actual-label">Үлгідегі сұраныс</span></span><span><i class="dot model"></i>Модель болжамы</span><span><i class="dot baseline"></i>Өткен апта</span></div><div id="chart"></div></div>
+          <div class="panel settings-panel"><p class="eyebrow">ЖОСПАР ПАРАМЕТРЛЕРІ</p><h2>Қосымша қор</h2><p class="muted">Ұсынылатын көлемге қосылады. Қор өскенде өнім жетіспеуі азаюы, ал қалдық көбеюі мүмкін.</p><div class="range-label"><label for="buffer">Қосымша көлем</label><output id="buffer-value" for="buffer">0%</output></div><input id="buffer" type="range" min="0" max="20" value="0" step="1"><div class="range-scale"><span>0% · негізгі жоспар</span><span>20%</span></div><button id="recalculate" class="button secondary" disabled>Жоспарды қайта есептеу</button><div class="assumption">Есеп шарты: сатылмаған өнім келесі күнге өтпейді және одан түсім болмайды.</div></div>
+        </div>
+      </section>
+      <section id="view-evaluation" class="view" hidden>
+        <div class="page-heading"><div><p class="eyebrow">НӘТИЖЕНІ ТЕКСЕРУ</p><h1>Модель қаншалықты пайдалы?</h1><p class="muted" id="evaluation-period">Кейінгі күндердегі тексеріс.</p></div><button id="download-report" class="button primary" disabled>↓ Есепті жүктеу</button></div>
+        <div class="notice" id="evidence-note"></div>
+        <div class="stats" id="evaluation-stats"></div>
+        <div class="panel"><div class="panel-header"><div><h2>Екі тәсілді салыстыру</h2><p class="muted">Бірдей күндер, бағалар және өнімнің өзіндік құны.</p></div></div><div class="table-wrap"><table><thead><tr><th>Көрсеткіш</th><th>Өткен аптаның сатылымы</th><th>Israptama</th></tr></thead><tbody id="comparison"></tbody></table></div><div class="table-foot">Бұл есеп жалдау ақысын, еңбекақыны және тұрақты шығындарды қамтымайды.</div></div>
+        <div class="panel method-summary"><h2>Уақыт бойынша адал тексеріс</h2><p>Әр тексерілетін күн үшін тек оған дейінгі деректер қолданылады. Модельді үйретуден кейінгі 14 күн қателер ауқымын бағалауға бөлінеді. Соңғы 21 күннің әрқайсысына болжам қайта жасалады.</p><p id="stockout-note"></p></div>
+      </section>
+      <section id="view-data" class="view" hidden>
+        <div class="page-heading"><div><p class="eyebrow">НАУБАЙХАНАҢЫЗДЫ ҚОСЫҢЫЗ</p><h1>Деректерді жүктеу</h1><p class="muted">Кестеден жоспарға — бір CSV файлымен.</p></div><button id="reset-sample" class="button secondary">Үлгіге оралу</button></div>
+        <div class="data-grid"><div class="panel upload-panel"><div class="upload-icon">⇅</div><h2>Сатылым тарихын таңдаңыз</h2><p class="muted">UTF-8 CSV · ең көбі 2 МБ · әр өнімге кемінде 77 күн</p><label class="button primary file-label" for="csv-file">CSV файлын таңдау</label><input id="csv-file" type="file" accept=".csv,text/csv" class="sr-only"><p id="file-name" class="muted">Файл таңдалмады</p><p class="privacy">Файл серверде сақталмайды. Сессия аяқталса, қайта жүктеңіз.</p></div><div class="panel"><div class="panel-header"><h2>CSV құрылымы</h2></div><dl class="schema"><dt>date</dt><dd>Күн: YYYY-MM-DD</dd><dt>product</dt><dd>Өнім атауы</dd><dt>baked</dt><dd>Пісірілген саны, дана</dd><dt>sold</dt><dd>Сатылған саны, дана</dd><dt>price</dt><dd>Бір өнім бағасы, ₸</dd><dt>cost</dt><dd>Бір өнімнің өзіндік құны, ₸</dd></dl><div class="download-links"><a href="/api/template.csv" download="israptama-template.csv">↓ CSV шаблоны</a><a href="/api/sample.csv" download="israptama-SYNTHETIC-sample.csv">↓ Жасанды үлгі</a></div></div></div>
+        <div class="notice">Бір өнім мен күнге бір жол жазыңыз. Күндер үздіксіз және барлық өнімдердің соңғы күні бірдей болуы керек. Дерегі жоқ күнді автоматты түрде нөлге айналдырмаңыз. Егер baked = sold болса, сұраныс сатылымнан жоғары болуы мүмкін.</div>
+        <div class="panel"><div class="panel-header"><h2>Ағымдағы деректер</h2></div><p id="dataset-summary" class="dataset-summary"></p></div>
+      </section>
+      <section id="view-method" class="view" hidden>
+        <div class="page-heading"><div><p class="eyebrow">АШЫҚ ӘДІС. ТЕКСЕРІЛЕТІН НӘТИЖЕ.</p><h1>Israptama қалай жұмыс істейді?</h1><p class="muted">Afresh-тің ашық сипатталған тәсілінен шабыт алған тәуелсіз оқу жобасы.</p></div></div>
+        <div class="method-steps"><article><span>01</span><h2>Тарихты оқу</h2><p>Өткен сатылым, апта күні, жеті күндік орташа мән және уақыт тренді.</p></article><article><span>02</span><h2>Сұранысты болжау</h2><p>Әр өнімге жеке Ridge регрессиясы. ЖИ болжамы қателесуі мүмкін.</p></article><article><span>03</span><h2>Көлемді ұсыну</h2><p>Қалдық құны мен өнім жетіспеуінің құнына қарай қателер үлестірімінің квантилін таңдау.</p></article></div>
+        <div class="panel prose"><h2>Неліктен болжам мен пісіру саны әртүрлі?</h2><p>Өнім жетіспесе, бір данадан түсетін маржа жоғалады. Өнім артылса, оның өзіндік құны шығынға айналады. Екеуінің арақатынасы ұсынылатын көлемге әсер етеді.</p><p class="formula">Мақсатты квантиль = (баға − өзіндік құн) / баға</p><h2>Қаржылық есеп</h2><p>Сценарийдегі маржалық пайда = min(пісірілген саны, сұраныс) × баға − пісірілген саны × өзіндік құн.</p><h2>Шектеулер</h2><p>Үлгі деректерде шынайы сұраныс жасанды түрде белгілі; ол модельді үйретуге берілмейді. CSV жүктегенде тек сатылым байқалады, сондықтан есеп байқалған сатылымға сүйенген сценарий болады. Нақты үнемді көрсету үшін наубайханада бөлек пилот қажет.</p><p>Ауа райы, мерекелер, акциялар, өнімді алмастырып сатып алу, пеш сыйымдылығы және сағаттық сұраныс бұл нұсқада есепке алынбайды. Толық жабылған күндер мен өнім бағасының күрт өзгерісі болжамды әлсіретуі мүмкін.</p><p>Israptama Afresh-пен байланысты емес және оның кодын немесе жабық моделін пайдаланбайды. <a href="https://www.afresh.com/departments/bakery" target="_blank" rel="noopener noreferrer">Ашық дереккөз ↗</a></p></div>
+      </section>
+      <footer><span class="footer-brand">Israptama<span aria-hidden="true">✳</span></span><span>Әр нанның қадірі бар.</span><span class="footer-right">Астана · Оқу прототипі / 2026</span></footer>
+    </div>
+  </main>
+</body>
+</html>

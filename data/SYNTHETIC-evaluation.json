@@ -1,0 +1,698 @@
+{
+  "notice": "SYNTHETIC SIMULATION, NOT REAL BUSINESS SAVINGS",
+  "synthetic": true,
+  "buffer": 0,
+  "rows": 336,
+  "days": 112,
+  "next_date": "2026-10-13",
+  "start_date": "2026-06-23",
+  "end_date": "2026-10-12",
+  "evaluation_start": "2026-09-22",
+  "evaluation_days": 21,
+  "stockout_rows": 32,
+  "evaluation_rows": 63,
+  "profit_delta": 26720.0,
+  "products": [
+    {
+      "name": "Круассан",
+      "forecast": 63.0,
+      "lower": 56,
+      "upper": 66,
+      "quantity": 63,
+      "price": 650.0,
+      "cost": 260.0,
+      "production_cost": 16380.0,
+      "last_week": 66
+    },
+    {
+      "name": "Нан",
+      "forecast": 96.6,
+      "lower": 93,
+      "upper": 100,
+      "quantity": 96,
+      "price": 400.0,
+      "cost": 160.0,
+      "production_cost": 15360.0,
+      "last_week": 96
+    },
+    {
+      "name": "Самса",
+      "forecast": 78.8,
+      "lower": 73,
+      "upper": 84,
+      "quantity": 79,
+      "price": 550.0,
+      "cost": 220.0,
+      "production_cost": 17380.0,
+      "last_week": 76
+    }
+  ],
+  "metrics": {
+    "baseline": {
+      "profit": 1605170.0,
+      "waste": 69,
+      "missed": 407,
+      "wape": 8.44
+    },
+    "model": {
+      "profit": 1631890.0,
+      "waste": 85,
+      "missed": 314,
+      "wape": 7.55
+    }
+  },
+  "chart": [
+    {
+      "date": "2026-09-22",
+      "actual": 242,
+      "baseline": 231.0,
+      "model": 228.63
+    },
+    {
+      "date": "2026-09-23",
+      "actual": 242,
+      "baseline": 244.0,
+      "model": 240.97
+    },
+    {
+      "date": "2026-09-24",
+      "actual": 271,
+      "baseline": 262.0,
+      "model": 251.63
+    },
+    {
+      "date": "2026-09-25",
+      "actual": 295,
+      "baseline": 268.0,
+      "model": 264.8
+    },
+    {
+      "date": "2026-09-26",
+      "actual": 316,
+      "baseline": 285.0,
+      "model": 272.67
+    },
+    {
+      "date": "2026-09-27",
+      "actual": 286,
+      "baseline": 280.0,
+      "model": 273.25
+    },
+    {
+      "date": "2026-09-28",
+      "actual": 216,
+      "baseline": 229.0,
+      "model": 225.54
+    },
+    {
+      "date": "2026-09-29",
+      "actual": 240,
+      "baseline": 242.0,
+      "model": 236.78
+    },
+    {
+      "date": "2026-09-30",
+      "actual": 259,
+      "baseline": 240.0,
+      "model": 243.61
+    },
+    {
+      "date": "2026-10-01",
+      "actual": 265,
+      "baseline": 251.0,
+      "model": 253.05
+    },
+    {
+      "date": "2026-10-02",
+      "actual": 277,
+      "baseline": 271.0,
+      "model": 269.04
+    },
+    {
+      "date": "2026-10-03",
+      "actual": 325,
+      "baseline": 270.0,
+      "model": 273.14
+    },
+    {
+      "date": "2026-10-04",
+      "actual": 279,
+      "baseline": 259.0,
+      "model": 272.79
+    },
+    {
+      "date": "2026-10-05",
+      "actual": 221,
+      "baseline": 216.0,
+      "model": 226.28
+    },
+    {
+      "date": "2026-10-06",
+      "actual": 238,
+      "baseline": 240.0,
+      "model": 239.37
+    },
+    {
+      "date": "2026-10-07",
+      "actual": 252,
+      "baseline": 259.0,
+      "model": 252.0
+    },
+    {
+      "date": "2026-10-08",
+      "actual": 270,
+      "baseline": 250.0,
+      "model": 258.16
+    },
+    {
+      "date": "2026-10-09",
+      "actual": 286,
+      "baseline": 266.0,
+      "model": 271.58
+    },
+    {
+      "date": "2026-10-10",
+      "actual": 329,
+      "baseline": 262.0,
+      "model": 275.65
+    },
+    {
+      "date": "2026-10-11",
+      "actual": 302,
+      "baseline": 257.0,
+      "model": 274.91
+    },
+    {
+      "date": "2026-10-12",
+      "actual": 230,
+      "baseline": 221.0,
+      "model": 227.73
+    }
+  ],
+  "evaluation": [
+    {
+      "date": "2026-09-22",
+      "product": "Круассан",
+      "actual": 65,
+      "forecast": 59.59,
+      "recommended": 62,
+      "baseline": 55
+    },
+    {
+      "date": "2026-09-23",
+      "product": "Круассан",
+      "actual": 71,
+      "forecast": 62.62,
+      "recommended": 65,
+      "baseline": 66
+    },
+    {
+      "date": "2026-09-24",
+      "product": "Круассан",
+      "actual": 77,
+      "forecast": 64.36,
+      "recommended": 68,
+      "baseline": 67
+    },
+    {
+      "date": "2026-09-25",
+      "product": "Круассан",
+      "actual": 78,
+      "forecast": 67.87,
+      "recommended": 70,
+      "baseline": 69
+    },
+    {
+      "date": "2026-09-26",
+      "product": "Круассан",
+      "actual": 81,
+      "forecast": 69.11,
+      "recommended": 71,
+      "baseline": 71
+    },
+    {
+      "date": "2026-09-27",
+      "product": "Круассан",
+      "actual": 75,
+      "forecast": 69.86,
+      "recommended": 72,
+      "baseline": 71
+    },
+    {
+      "date": "2026-09-28",
+      "product": "Круассан",
+      "actual": 56,
+      "forecast": 58.06,
+      "recommended": 60,
+      "baseline": 56
+    },
+    {
+      "date": "2026-09-29",
+      "product": "Круассан",
+      "actual": 62,
+      "forecast": 61.39,
+      "recommended": 63,
+      "baseline": 65
+    },
+    {
+      "date": "2026-09-30",
+      "product": "Круассан",
+      "actual": 68,
+      "forecast": 63.91,
+      "recommended": 66,
+      "baseline": 69
+    },
+    {
+      "date": "2026-10-01",
+      "product": "Круассан",
+      "actual": 77,
+      "forecast": 65.64,
+      "recommended": 68,
+      "baseline": 66
+    },
+    {
+      "date": "2026-10-02",
+      "product": "Круассан",
+      "actual": 69,
+      "forecast": 69.72,
+      "recommended": 71,
+      "baseline": 71
+    },
+    {
+      "date": "2026-10-03",
+      "product": "Круассан",
+      "actual": 87,
+      "forecast": 70.59,
+      "recommended": 72,
+      "baseline": 70
+    },
+    {
+      "date": "2026-10-04",
+      "product": "Круассан",
+      "actual": 62,
+      "forecast": 69.44,
+      "recommended": 71,
+      "baseline": 65
+    },
+    {
+      "date": "2026-10-05",
+      "product": "Круассан",
+      "actual": 58,
+      "forecast": 58.72,
+      "recommended": 60,
+      "baseline": 56
+    },
+    {
+      "date": "2026-10-06",
+      "product": "Круассан",
+      "actual": 66,
+      "forecast": 61.71,
+      "recommended": 63,
+      "baseline": 62
+    },
+    {
+      "date": "2026-10-07",
+      "product": "Круассан",
+      "actual": 67,
+      "forecast": 65.31,
+      "recommended": 66,
+      "baseline": 68
+    },
+    {
+      "date": "2026-10-08",
+      "product": "Круассан",
+      "actual": 73,
+      "forecast": 66.76,
+      "recommended": 67,
+      "baseline": 64
+    },
+    {
+      "date": "2026-10-09",
+      "product": "Круассан",
+      "actual": 77,
+      "forecast": 70.42,
+      "recommended": 71,
+      "baseline": 69
+    },
+    {
+      "date": "2026-10-10",
+      "product": "Круассан",
+      "actual": 86,
+      "forecast": 70.82,
+      "recommended": 71,
+      "baseline": 66
+    },
+    {
+      "date": "2026-10-11",
+      "product": "Круассан",
+      "actual": 85,
+      "forecast": 69.86,
+      "recommended": 69,
+      "baseline": 62
+    },
+    {
+      "date": "2026-10-12",
+      "product": "Круассан",
+      "actual": 58,
+      "forecast": 59.14,
+      "recommended": 59,
+      "baseline": 58
+    },
+    {
+      "date": "2026-09-22",
+      "product": "Нан",
+      "actual": 96,
+      "forecast": 94.7,
+      "recommended": 98,
+      "baseline": 100
+    },
+    {
+      "date": "2026-09-23",
+      "product": "Нан",
+      "actual": 92,
+      "forecast": 97.62,
+      "recommended": 100,
+      "baseline": 97
+    },
+    {
+      "date": "2026-09-24",
+      "product": "Нан",
+      "actual": 97,
+      "forecast": 103.14,
+      "recommended": 106,
+      "baseline": 105
+    },
+    {
+      "date": "2026-09-25",
+      "product": "Нан",
+      "actual": 119,
+      "forecast": 108.96,
+      "recommended": 111,
+      "baseline": 109
+    },
+    {
+      "date": "2026-09-26",
+      "product": "Нан",
+      "actual": 129,
+      "forecast": 110.53,
+      "recommended": 113,
+      "baseline": 115
+    },
+    {
+      "date": "2026-09-27",
+      "product": "Нан",
+      "actual": 116,
+      "forecast": 110.75,
+      "recommended": 114,
+      "baseline": 113
+    },
+    {
+      "date": "2026-09-28",
+      "product": "Нан",
+      "actual": 89,
+      "forecast": 91.93,
+      "recommended": 95,
+      "baseline": 96
+    },
+    {
+      "date": "2026-09-29",
+      "product": "Нан",
+      "actual": 93,
+      "forecast": 95.41,
+      "recommended": 98,
+      "baseline": 96
+    },
+    {
+      "date": "2026-09-30",
+      "product": "Нан",
+      "actual": 106,
+      "forecast": 97.64,
+      "recommended": 99,
+      "baseline": 92
+    },
+    {
+      "date": "2026-10-01",
+      "product": "Нан",
+      "actual": 102,
+      "forecast": 102.62,
+      "recommended": 105,
+      "baseline": 97
+    },
+    {
+      "date": "2026-10-02",
+      "product": "Нан",
+      "actual": 115,
+      "forecast": 109.71,
+      "recommended": 112,
+      "baseline": 111
+    },
+    {
+      "date": "2026-10-03",
+      "product": "Нан",
+      "actual": 130,
+      "forecast": 110.31,
+      "recommended": 110,
+      "baseline": 108
+    },
+    {
+      "date": "2026-10-04",
+      "product": "Нан",
+      "actual": 119,
+      "forecast": 111.17,
+      "recommended": 110,
+      "baseline": 108
+    },
+    {
+      "date": "2026-10-05",
+      "product": "Нан",
+      "actual": 89,
+      "forecast": 91.77,
+      "recommended": 90,
+      "baseline": 89
+    },
+    {
+      "date": "2026-10-06",
+      "product": "Нан",
+      "actual": 96,
+      "forecast": 96.55,
+      "recommended": 95,
+      "baseline": 93
+    },
+    {
+      "date": "2026-10-07",
+      "product": "Нан",
+      "actual": 96,
+      "forecast": 101.25,
+      "recommended": 99,
+      "baseline": 106
+    },
+    {
+      "date": "2026-10-08",
+      "product": "Нан",
+      "actual": 109,
+      "forecast": 104.63,
+      "recommended": 103,
+      "baseline": 102
+    },
+    {
+      "date": "2026-10-09",
+      "product": "Нан",
+      "actual": 108,
+      "forecast": 109.79,
+      "recommended": 109,
+      "baseline": 108
+    },
+    {
+      "date": "2026-10-10",
+      "product": "Нан",
+      "actual": 132,
+      "forecast": 111.47,
+      "recommended": 110,
+      "baseline": 109
+    },
+    {
+      "date": "2026-10-11",
+      "product": "Нан",
+      "actual": 119,
+      "forecast": 111.75,
+      "recommended": 110,
+      "baseline": 109
+    },
+    {
+      "date": "2026-10-12",
+      "product": "Нан",
+      "actual": 87,
+      "forecast": 92.04,
+      "recommended": 91,
+      "baseline": 89
+    },
+    {
+      "date": "2026-09-22",
+      "product": "Самса",
+      "actual": 81,
+      "forecast": 74.33,
+      "recommended": 78,
+      "baseline": 76
+    },
+    {
+      "date": "2026-09-23",
+      "product": "Самса",
+      "actual": 79,
+      "forecast": 80.73,
+      "recommended": 83,
+      "baseline": 81
+    },
+    {
+      "date": "2026-09-24",
+      "product": "Самса",
+      "actual": 97,
+      "forecast": 84.13,
+      "recommended": 87,
+      "baseline": 90
+    },
+    {
+      "date": "2026-09-25",
+      "product": "Самса",
+      "actual": 98,
+      "forecast": 87.96,
+      "recommended": 91,
+      "baseline": 90
+    },
+    {
+      "date": "2026-09-26",
+      "product": "Самса",
+      "actual": 106,
+      "forecast": 93.03,
+      "recommended": 96,
+      "baseline": 99
+    },
+    {
+      "date": "2026-09-27",
+      "product": "Самса",
+      "actual": 95,
+      "forecast": 92.65,
+      "recommended": 96,
+      "baseline": 96
+    },
+    {
+      "date": "2026-09-28",
+      "product": "Самса",
+      "actual": 71,
+      "forecast": 75.55,
+      "recommended": 79,
+      "baseline": 77
+    },
+    {
+      "date": "2026-09-29",
+      "product": "Самса",
+      "actual": 85,
+      "forecast": 79.98,
+      "recommended": 83,
+      "baseline": 81
+    },
+    {
+      "date": "2026-09-30",
+      "product": "Самса",
+      "actual": 85,
+      "forecast": 82.06,
+      "recommended": 87,
+      "baseline": 79
+    },
+    {
+      "date": "2026-10-01",
+      "product": "Самса",
+      "actual": 86,
+      "forecast": 84.79,
+      "recommended": 89,
+      "baseline": 88
+    },
+    {
+      "date": "2026-10-02",
+      "product": "Самса",
+      "actual": 93,
+      "forecast": 89.6,
+      "recommended": 93,
+      "baseline": 89
+    },
+    {
+      "date": "2026-10-03",
+      "product": "Самса",
+      "actual": 108,
+      "forecast": 92.24,
+      "recommended": 96,
+      "baseline": 92
+    },
+    {
+      "date": "2026-10-04",
+      "product": "Самса",
+      "actual": 98,
+      "forecast": 92.18,
+      "recommended": 95,
+      "baseline": 86
+    },
+    {
+      "date": "2026-10-05",
+      "product": "Самса",
+      "actual": 74,
+      "forecast": 75.79,
+      "recommended": 76,
+      "baseline": 71
+    },
+    {
+      "date": "2026-10-06",
+      "product": "Самса",
+      "actual": 76,
+      "forecast": 81.12,
+      "recommended": 80,
+      "baseline": 85
+    },
+    {
+      "date": "2026-10-07",
+      "product": "Самса",
+      "actual": 89,
+      "forecast": 85.44,
+      "recommended": 84,
+      "baseline": 85
+    },
+    {
+      "date": "2026-10-08",
+      "product": "Самса",
+      "actual": 88,
+      "forecast": 86.77,
+      "recommended": 86,
+      "baseline": 84
+    },
+    {
+      "date": "2026-10-09",
+      "product": "Самса",
+      "actual": 101,
+      "forecast": 91.37,
+      "recommended": 90,
+      "baseline": 89
+    },
+    {
+      "date": "2026-10-10",
+      "product": "Самса",
+      "actual": 111,
+      "forecast": 93.36,
+      "recommended": 92,
+      "baseline": 87
+    },
+    {
+      "date": "2026-10-11",
+      "product": "Самса",
+      "actual": 98,
+      "forecast": 93.31,
+      "recommended": 92,
+      "baseline": 86
+    },
+    {
+      "date": "2026-10-12",
+      "product": "Самса",
+      "actual": 85,
+      "forecast": 76.55,
+      "recommended": 76,
+      "baseline": 74
+    }
+  ]
+}

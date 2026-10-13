@@ -1,0 +1,2 @@
+# Version used for the included reproducible experiment and local test run.
+numpy==2.3.5
