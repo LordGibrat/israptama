@@ -10,6 +10,8 @@ An AI-assisted decision-support prototype for small bakeries in Kazakhstan. It f
 
 ![Israptama bakery planning dashboard](preview-desktop.png)
 
+[Quick start](#quick-start) · [Results](#initial-experiment) · [CSV format](#csv-input) · [Mobile preview](preview-mobile.png)
+
 Independent student project inspired by the publicly described Afresh workflow: sales history → demand forecast → production recommendation → business evaluation. No affiliation with Afresh and no access to its code, models, or customer data.
 
 ## What the prototype demonstrates
@@ -50,23 +52,6 @@ Evaluated on 336 synthetic records across three products, using a 21-day walk-fo
 | Simulated unsold units | 69 | 85 |
 
 Profit increased in the simulation, but waste also increased. These results demonstrate the tradeoff, not real-world waste reduction. See [RESULTS.md](RESULTS.md) for assumptions and the full comparison.
-
-## Open the app
-
-On this computer, right-click `start.ps1` and run with PowerShell, or:
-
-```powershell
-powershell.exe -NoProfile -ExecutionPolicy Bypass -File .\start.ps1
-```
-
-Then open http://localhost:8765. Keep the terminal running. If the port is occupied, use `-Port 8766`. The server binds only to 127.0.0.1.
-
-On another computer: install Python 3.11+ and run:
-
-```text
-python -m pip install -r requirements.txt
-python app.py
-```
 
 ## CSV input
 
