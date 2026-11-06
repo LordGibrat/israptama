@@ -24,11 +24,11 @@ class HTTPTests(unittest.TestCase):
         cls.server.server_close()
         cls.thread.join(timeout=3)
 
-    def post(self, body, origin=None):
+    def post(self, body, origin=None, route="/api/analyze"):
         headers = {"Content-Type": "application/json"}
         if origin:
             headers["Origin"] = origin
-        request = Request(self.base + "/api/analyze",
+        request = Request(self.base + route,
                           data=json.dumps(body).encode(), headers=headers)
         try:
             with urlopen(request, timeout=10) as response:
@@ -68,6 +68,26 @@ class HTTPTests(unittest.TestCase):
         with self.assertRaises(HTTPError) as caught:
             urlopen(self.base + "/engine.py", timeout=3)
         self.assertEqual(caught.exception.code, 404)
+
+    def test_research_report_exposes_real_test_metrics(self):
+        with urlopen(self.base + "/api/research", timeout=3) as response:
+            report = json.load(response)
+        self.assertEqual(report["dataset"]["license"], "CC BY 4.0")
+        self.assertGreater(report["splits"]["test"]["low_1_to_3"], 0)
+        self.assertIn("average_precision", report["models"]["expanded"]["test"])
+
+    def test_review_inference_compares_both_models_without_echoing_text(self):
+        review = "The banana bread tasted dry and had very little flavor."
+        status, result = self.post({"text": review}, route="/api/review")
+        self.assertEqual(status, 200)
+        self.assertIn(result["label"], ("low_rating", "positive"))
+        self.assertEqual(set(result["candidates"]), {"baseline", "expanded"})
+        self.assertNotIn(review, json.dumps(result))
+
+    def test_review_rejects_invalid_text_and_foreign_origin(self):
+        self.assertEqual(self.post({"text": "Нан жақсы"}, route="/api/review")[0], 400)
+        self.assertEqual(self.post({"text": "A good little cake"},
+                                   origin="https://example.com", route="/api/review")[0], 403)
 
 
 if __name__ == "__main__":

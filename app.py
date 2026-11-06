@@ -8,6 +8,7 @@ from pathlib import Path
 from urllib.parse import urlparse
 
 from engine import FIELDS, analyze, export_csv, parse_csv, sample_rows
+from review_model import classify_review, public_study
 
 STATIC = Path(__file__).parent / "static"
 
@@ -33,6 +34,8 @@ class Handler(BaseHTTPRequestHandler):
         route = urlparse(self.path).path
         if route == "/api/sample":
             self.json(200, analyze(sample_rows(), synthetic=True))
+        elif route == "/api/research":
+            self.json(200, public_study())
         elif route in ("/api/sample.csv", "/api/template.csv"):
             content = (export_csv(sample_rows()) if route.endswith("sample.csv")
                        else ",".join(FIELDS) + "\n2026-07-01,Нан,100,85,400,160\n")
@@ -53,7 +56,8 @@ class Handler(BaseHTTPRequestHandler):
             self.send(200, (STATIC / filename).read_bytes(), kind + "; charset=utf-8")
 
     def do_POST(self) -> None:
-        if self.path != "/api/analyze":
+        route = urlparse(self.path).path
+        if route not in ("/api/analyze", "/api/review"):
             self.json(404, {"error": "Бет табылмады."})
             return
         origin = self.headers.get("Origin")
@@ -67,12 +71,16 @@ class Handler(BaseHTTPRequestHandler):
             return
         try:
             length = int(self.headers.get("Content-Length", "0"))
-            if not 0 < length <= 2_100_000:
+            limit = 2_100_000 if route == "/api/analyze" else 8_000
+            if not 0 < length <= limit:
                 self.json(413, {"error": "Файл тым үлкен немесе сұрау бос."})
                 return
             body = json.loads(self.rfile.read(length))
             if not isinstance(body, dict):
                 raise ValueError("Сұрау JSON объектісі болуы керек.")
+            if route == "/api/review":
+                self.json(200, classify_review(body.get("text")))
+                return
             csv_text = body.get("csv")
             synthetic = csv_text is None
             rows = sample_rows() if synthetic else parse_csv(csv_text)
