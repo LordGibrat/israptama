@@ -1,0 +1,208 @@
+{
+  "study": "English recipe-review low-rating prediction for bakery feedback triage",
+  "dataset": {
+    "name": "UCI Recipe Reviews and User Feedback",
+    "url": "https://archive.ics.uci.edu/dataset/911/recipe+reviews+and+user+feedback+dataset",
+    "doi": "10.24432/C5FG95",
+    "license": "CC BY 4.0",
+    "archive_sha256": "aff630962b32fb8e8fc43ba8eddf79c45e2ae70321e81dda383c95f04887b77f",
+    "title_rule": "\\b(?:bread|muffins?|cookies?|cupcakes?|cakes?|pies?|bars?|crisps?|cheesecake|macaroons?|pancakes?|dessert|pudding|heavenlies|cornbread)\\b",
+    "title_exclusion": "\\b(?:shepherd|corn pudding)\\b"
+  },
+  "protocol": {
+    "labels": "1-3 stars = low rating; 4-5 = positive; 0 excluded",
+    "input": "review text only; no recipe title/code, star, user or engagement fields",
+    "split": "recipe-disjoint GroupShuffleSplit; test 16% seed 42, then validation 18% of remainder seed 43",
+    "selection": "validation minority F1; threshold maximizes validation minority F1, ties choose highest threshold; deployment tie chooses baseline",
+    "controlled_change": "add character_wb 3-5 gram TF-IDF to word unigram TF-IDF; identical logistic regression and row L2 norm",
+    "test_policy": "one frozen test evaluation after validation selection"
+  },
+  "cleaning": {
+    "source_rows": 18182,
+    "bakery_rated_rows": 6038,
+    "unrated_bakery_rows": 773,
+    "empty_text_rows": 4,
+    "conflicting_rows_removed": 6,
+    "duplicate_rows_removed": 44,
+    "usable_rows": 5984,
+    "recipes": 38
+  },
+  "splits": {
+    "train": {
+      "rows": 4011,
+      "recipes": 25,
+      "positive_4_or_5": 3758,
+      "low_1_to_3": 253,
+      "low_prevalence": 0.063077,
+      "recipe_codes": [
+        "1063",
+        "1196",
+        "12259",
+        "12700",
+        "16458",
+        "19201",
+        "3143",
+        "32480",
+        "3309",
+        "33457",
+        "33743",
+        "35948",
+        "36450",
+        "3683",
+        "38550",
+        "386",
+        "414",
+        "42386",
+        "45495",
+        "46655",
+        "74724",
+        "7539",
+        "82745",
+        "8431",
+        "957"
+      ]
+    },
+    "validation": {
+      "rows": 799,
+      "recipes": 6,
+      "positive_4_or_5": 725,
+      "low_1_to_3": 74,
+      "low_prevalence": 0.092616,
+      "recipe_codes": [
+        "26937",
+        "27675",
+        "3058",
+        "33121",
+        "33206",
+        "6086"
+      ]
+    },
+    "test": {
+      "rows": 1174,
+      "recipes": 7,
+      "positive_4_or_5": 1101,
+      "low_1_to_3": 73,
+      "low_prevalence": 0.062181,
+      "recipe_codes": [
+        "14600",
+        "1693",
+        "3290",
+        "4383",
+        "7178",
+        "7708",
+        "9010"
+      ]
+    }
+  },
+  "models": {
+    "baseline": {
+      "validation": {
+        "threshold": 0.65238837,
+        "accuracy": 0.938673,
+        "balanced_accuracy": 0.759925,
+        "low_rating_precision": 0.727273,
+        "low_rating_recall": 0.540541,
+        "low_rating_f1": 0.620155,
+        "low_rating_support": 74,
+        "average_precision": 0.563952,
+        "prevalence_reference": 0.092616,
+        "confusion_matrix_0_positive_1_low": [
+          [
+            710,
+            15
+          ],
+          [
+            34,
+            40
+          ]
+        ]
+      },
+      "test": {
+        "threshold": 0.65238837,
+        "accuracy": 0.936968,
+        "balanced_accuracy": 0.729772,
+        "low_rating_precision": 0.493151,
+        "low_rating_recall": 0.493151,
+        "low_rating_f1": 0.493151,
+        "low_rating_support": 73,
+        "average_precision": 0.518434,
+        "prevalence_reference": 0.062181,
+        "confusion_matrix_0_positive_1_low": [
+          [
+            1064,
+            37
+          ],
+          [
+            37,
+            36
+          ]
+        ]
+      }
+    },
+    "expanded": {
+      "validation": {
+        "threshold": 0.54614365,
+        "accuracy": 0.926158,
+        "balanced_accuracy": 0.801566,
+        "low_rating_precision": 0.592593,
+        "low_rating_recall": 0.648649,
+        "low_rating_f1": 0.619355,
+        "low_rating_support": 74,
+        "average_precision": 0.594963,
+        "prevalence_reference": 0.092616,
+        "confusion_matrix_0_positive_1_low": [
+          [
+            692,
+            33
+          ],
+          [
+            26,
+            48
+          ]
+        ]
+      },
+      "test": {
+        "threshold": 0.54614365,
+        "accuracy": 0.921635,
+        "balanced_accuracy": 0.79834,
+        "low_rating_precision": 0.417391,
+        "low_rating_recall": 0.657534,
+        "low_rating_f1": 0.510638,
+        "low_rating_support": 73,
+        "average_precision": 0.558281,
+        "prevalence_reference": 0.062181,
+        "confusion_matrix_0_positive_1_low": [
+          [
+            1034,
+            67
+          ],
+          [
+            25,
+            48
+          ]
+        ]
+      }
+    }
+  },
+  "deployment": {
+    "model": "baseline",
+    "threshold": 0.65238837
+  },
+  "uncertainty": {
+    "method": "2000 recipe-cluster resamples; expanded minus baseline low-rating F1",
+    "seed": 2026,
+    "lower_95": -0.065615,
+    "upper_95": 0.079838
+  },
+  "versions": {
+    "numpy": "2.3.5",
+    "scikit_learn": "1.9.1"
+  },
+  "limitations": [
+    "Recipe comments are a proxy, not bakery customer transactions or demand.",
+    "The corpus is English and does not validate Kazakh-language inference.",
+    "Stars are weak, imbalanced labels; 1-3 does not prove a complaint.",
+    "Only a small number of held-out recipes support the test estimate.",
+    "No business uplift or planning benefit is established by this classifier."
+  ]
+}

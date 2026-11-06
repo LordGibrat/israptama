@@ -1,6 +1,8 @@
 'use strict';
 let analysis = null;
 let uploadedCSV = null;
+let researchReport = null;
+let researchLoading = null;
 const $ = (selector) => document.querySelector(selector);
 const number = (value) => new Intl.NumberFormat('ru-RU', {maximumFractionDigits: 1}).format(value);
 const money = (value) => `${number(Math.round(value))} ₸`;
@@ -13,12 +15,85 @@ const escapeHTML = (value) => String(value).replace(/[&<>"']/g, (char) => ({'&':
 
 function showView(name) {
   document.querySelectorAll('.view').forEach((view) => { view.hidden = view.id !== `view-${name}`; });
+  $('#forecast-banner').hidden = name === 'reviews';
   document.querySelectorAll('.nav-item').forEach((button) => {
     const active = button.dataset.view === name;
     button.classList.toggle('active', active);
     if (active) button.setAttribute('aria-current', 'page'); else button.removeAttribute('aria-current');
   });
   $('#breadcrumb').textContent = document.querySelector(`[data-view="${name}"]`).textContent.slice(1).trim();
+  if (name === 'reviews') loadResearch();
+}
+
+function researchValue(value) { return Number(value).toFixed(3).replace('.', ','); }
+
+function renderResearch(report) {
+  researchReport = report;
+  const test = report.splits.test;
+  const validation = report.models;
+  $('#research-rows').textContent = number(report.cleaning.usable_rows);
+  $('#research-test').textContent = `${number(test.rows)} / ${test.recipes}`;
+  $('#research-low').textContent = `${test.low_1_to_3} · ${number(test.low_prevalence * 100)}%`;
+  $('#research-split').textContent = `${report.splits.train.recipes} / ${report.splits.validation.recipes} / ${test.recipes} рецепт`;
+  const selected = report.deployment.model === 'baseline' ? 'сөздер ғана' : 'сөздер + таңбалар';
+  $('#research-deployment').textContent = `Қызметтегі үлгі: ${selected}. Валидациядағы F1: ${researchValue(validation.baseline.validation.low_rating_f1)} және ${researchValue(validation.expanded.validation.low_rating_f1)}. Таңдау тестке дейін жасалды.`;
+  const measures = [
+    ['Төмен баға F1', 'low_rating_f1'],
+    ['Average precision (AP)', 'average_precision'],
+    ['Төмен бағаны табу үлесі', 'low_rating_recall'],
+    ['Төмен баға белгісінің дәлдігі', 'low_rating_precision'],
+    ['Теңгерілген дәлдік', 'balanced_accuracy'],
+  ];
+  $('#research-comparison').innerHTML = measures.map(([label, key]) => `<tr><td>${escapeHTML(label)}</td><td>${researchValue(validation.baseline.test[key])}</td><td>${researchValue(validation.expanded.test[key])}</td></tr>`).join('');
+  const delta = validation.expanded.test.low_rating_f1 - validation.baseline.test.low_rating_f1;
+  const interval = report.uncertainty;
+  $('#research-uncertainty').textContent = `F1 айырмасы ${delta >= 0 ? '+' : ''}${researchValue(delta)}. Рецепт бойынша қайта іріктеудің 95% аралығы: ${researchValue(interval.lower_95)}…${researchValue(interval.upper_95)}. Аралық нөлді қамтиды, сондықтан артықшылық дәлелденген жоқ. AP үшін кездейсоқ негіз: ${researchValue(validation.baseline.test.prevalence_reference)}.`;
+}
+
+async function loadResearch() {
+  if (researchReport || researchLoading) return researchLoading;
+  researchLoading = (async () => {
+    try {
+      const response = await fetch('/api/research');
+      if (!response.ok) throw new Error('Зерттеу нәтижесін жүктеу мүмкін болмады.');
+      renderResearch(await response.json());
+    } catch (error) {
+      $('#research-deployment').textContent = error.message;
+      $('#research-comparison').innerHTML = `<tr><td colspan="3">${escapeHTML(error.message)}</td></tr>`;
+      researchLoading = null;
+    }
+  })();
+  return researchLoading;
+}
+
+const reviewExamples = {
+  positive: 'The banana bread was moist and delicious. I would happily bake it again.',
+  critical: 'The cake was very dry and bland. The texture was disappointing and I would not make it again.',
+};
+
+function reviewChoice(candidate) {
+  const label = candidate.label === 'low_rating' ? 'Төмен бағаға ұқсайды' : 'Жоғары бағаға ұқсайды';
+  return `${label} · ұпай ${researchValue(candidate.low_rating_score)} / шек ${researchValue(candidate.threshold)}`;
+}
+
+async function classifyReview() {
+  $('#review-error').hidden = true;
+  $('#review-output').hidden = true;
+  const button = $('#classify-review');
+  button.disabled = true;
+  try {
+    const response = await fetch('/api/review', {method: 'POST', headers: {'Content-Type': 'application/json'}, body: JSON.stringify({text: $('#review-input').value})});
+    const body = await response.json();
+    if (!response.ok) throw new Error(body.error || 'Пікірді талдау мүмкін болмады.');
+    $('#review-verdict').textContent = body.label === 'low_rating' ? 'Төмен бағаға ұқсайды' : 'Жоғары бағаға ұқсайды';
+    $('#review-verdict-note').textContent = `Валидацияда таңдалған үлгі: ${body.model === 'baseline' ? 'сөздер ғана' : 'сөздер + таңбалар'}. Бұл нақты рейтингті немесе тұтынушы сұранысын анықтамайды.`;
+    $('#review-baseline').textContent = reviewChoice(body.candidates.baseline);
+    $('#review-expanded').textContent = reviewChoice(body.candidates.expanded);
+    $('#review-output').hidden = false;
+  } catch (error) {
+    $('#review-error').textContent = error.message;
+    $('#review-error').hidden = false;
+  } finally { button.disabled = false; }
 }
 
 function stat(label, value, note, highlight=false) {
@@ -120,6 +195,13 @@ function csvCell(value) {
 
 document.querySelectorAll('.nav-item').forEach(button=>button.addEventListener('click',()=>showView(button.dataset.view)));
 document.querySelectorAll('[data-open-view]').forEach(button=>button.addEventListener('click',()=>showView(button.dataset.openView)));
+document.querySelectorAll('[data-review-example]').forEach(button=>button.addEventListener('click',()=>{
+  $('#review-input').value = reviewExamples[button.dataset.reviewExample];
+  $('#review-error').hidden = true;
+  $('#review-output').hidden = true;
+  $('#review-input').focus();
+}));
+$('#classify-review').addEventListener('click',classifyReview);
 $('#buffer').addEventListener('input',()=>{$('#buffer-value').textContent=`${$('#buffer').value}%`;});
 $('#recalculate').addEventListener('click',()=>update());
 $('#reset-sample').addEventListener('click',async()=>{

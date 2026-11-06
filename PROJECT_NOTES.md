@@ -2,7 +2,7 @@
 
 Israptama is an AI-assisted student prototype for bakery production planning. Implementation, interface design, tests, and documentation were developed with AI coding assistance. The repository provides inspectable source, model assumptions, tests, and reproducible evaluation rather than treating generated output as evidence of business impact.
 
-Initial outreach has been made to five bakeries in Astana, as reported by the project owner. Responses and real-data validation are pending. The current version uses synthetic data only. Completed customer interviews, permissions to use real data, a live pilot, paying customers, and real-world savings are not claimed. Afresh is a public conceptual reference; its proprietary implementation was not used.
+Initial outreach has been made to five bakeries in Astana, as reported by the project owner. Responses and real-data validation are pending. The production-planning evaluation still uses synthetic sales only. A separate NLP experiment uses real, openly licensed English recipe-review text; those results are not bakery demand evidence. Completed customer interviews, permissions to use real business data, a live pilot, paying customers, and real-world savings are not claimed. Afresh is a public conceptual reference; its proprietary implementation was not used.
 
 The interface is Kazakh and the project documentation is English. The application is local-only: sharing this repository does not create a public live demo. A GitHub Pages static site alone cannot run the Python backend.
 
