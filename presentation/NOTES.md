@@ -20,7 +20,7 @@ The eight slide timings total **7:00**. Rehearse the switch to the live tab; sli
 
 ### 4 · Honest split · 2:20–3:15
 
-“A random row split could let reviews of the same recipe appear in both training and test sets. That would overstate performance on a new bakery product. I therefore grouped by recipe: 25 training recipes with 4,011 reviews, six validation recipes with 799 reviews, and seven held-out test recipes with 1,174 reviews. I normalized and deduplicated text before splitting, and I fit both TF-IDF branches only on training reviews. I used validation data to select each decision threshold and the model for the interface. The test set was then evaluated once, after those choices were frozen.”
+“A random row split could let reviews of the same recipe appear in both training and test sets. That would overstate performance on a new bakery product. I therefore grouped by recipe: 25 training recipes with 4,011 reviews, six validation recipes with 799 reviews, and seven held-out test recipes with 1,174 reviews. I normalized and deduplicated text before splitting, and I fit both TF-IDF branches only on training reviews. I used validation data to select each decision threshold and the model for the interface. The test set was evaluated after those choices were frozen; later reruns check reproducibility, not model selection.”
 
 ### 5 · Controlled model change · 3:15–4:10
 

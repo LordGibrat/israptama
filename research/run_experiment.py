@@ -162,7 +162,7 @@ def run() -> tuple[dict, dict, list[dict]]:
                      "split": "recipe-disjoint GroupShuffleSplit; test 16% seed 42, then validation 18% of remainder seed 43",
                      "selection": "validation minority F1; threshold maximizes validation minority F1, ties choose highest threshold; deployment tie chooses baseline",
                      "controlled_change": "add character_wb 3-5 gram TF-IDF to word unigram TF-IDF; identical logistic regression and row L2 norm",
-                     "test_policy": "one frozen test evaluation after validation selection"},
+                     "test_policy": "frozen test evaluated after validation selection; later reruns only check reproducibility"},
         "cleaning": cleaning,
         "splits": split_info,
         "models": evaluated,
