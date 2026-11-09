@@ -59,7 +59,7 @@ Use three or four of these, depending on what the instructor asks. Keep each ans
 1. `review_model.py`: title filter, deduplication, recipe-group split, two model definitions, local inference.
 2. `research/run_experiment.py`: pinned download, validation threshold rule, test metrics, cluster bootstrap, artifacts.
 3. `research/artifacts/results.json`: exact counts, split recipe codes, thresholds, measured results and caveats.
-4. `app.py` and `static/`: local API and dashboard view; the NLP path is separate from `/api/analyze`.
+4. `app.py` and `public/`: API and dashboard view; the NLP path is separate from `/api/analyze`.
 5. `tests/`: split, model configuration, HTTP and original forecasting checks.
 
 Data attribution: Ali, A., Matuszewski, S., & Czupyt, J. (2023), *Recipe Reviews and User Feedback*, UCI Machine Learning Repository, DOI [10.24432/C5FG95](https://doi.org/10.24432/C5FG95), CC BY 4.0.

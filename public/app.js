@@ -4,6 +4,7 @@ let uploadedCSV = null;
 let researchReport = null;
 let researchLoading = null;
 const $ = (selector) => document.querySelector(selector);
+const hosted = !['localhost', '127.0.0.1'].includes(location.hostname);
 const number = (value) => new Intl.NumberFormat('ru-RU', {maximumFractionDigits: 1}).format(value);
 const money = (value) => `${number(Math.round(value))} ₸`;
 const dateLabel = (value) => {
@@ -128,7 +129,7 @@ function render(result) {
   $('#source-label').textContent=simulated?'ҮЛГІ ДЕРЕКТЕР':'ЖҮКТЕЛГЕН ДЕРЕКТЕР';
   $('#source-note').textContent=simulated?'Бұл — жасанды наубайхана. Нәтижелер нақты бизнес үнемін білдірмейді.':'Бағалау байқалған сатылымға сүйенеді. Өнім жетіспеген күндерде шынайы сұраныс белгісіз.';
   $('#workspace-name').replaceChildren(document.createTextNode(simulated?'Астана · демо наубайхана':'Жүктелген деректер'));
-  const localLabel=document.createElement('small');localLabel.textContent='Жергілікті режим';$('#workspace-name').append(localLabel);
+  const localLabel=document.createElement('small');localLabel.textContent=hosted?'Vercel-де өңделеді':'Жергілікті режим';$('#workspace-name').append(localLabel);
   $('#buffer').value=result.buffer;
   $('#buffer-value').textContent=`${result.buffer}%`;
   $('#plan-subtitle').textContent=`${dateLabel(result.next_date)} · ${result.days} күндік тарих · ${result.products.length} өнім · қолданылған қосымша қор: ${result.buffer}%`;
@@ -195,6 +196,10 @@ function csvCell(value) {
 }
 
 document.querySelectorAll('.nav-item').forEach(button=>button.addEventListener('click',()=>showView(button.dataset.view)));
+if (hosted) {
+  $('.review-action-row > span').textContent='Vercel-де өңделеді · қолданба сақтамайды';
+  $('.upload-panel .privacy').textContent='Файл Vercel серверінде осы сұрау кезінде өңделеді. Қолданба оны сақтамайды.';
+}
 document.querySelectorAll('[data-open-view]').forEach(button=>button.addEventListener('click',()=>showView(button.dataset.openView)));
 document.querySelectorAll('[data-review-example]').forEach(button=>button.addEventListener('click',()=>{
   $('#review-input').value = reviewExamples[button.dataset.reviewExample];

@@ -6,6 +6,7 @@ from http.server import ThreadingHTTPServer
 from urllib.error import HTTPError
 from urllib.request import Request, urlopen
 
+from api.index import handler as VercelHandler
 from app import Handler
 from engine import export_csv, sample_rows
 
@@ -24,10 +25,14 @@ class HTTPTests(unittest.TestCase):
         cls.server.server_close()
         cls.thread.join(timeout=3)
 
-    def post(self, body, origin=None, route="/api/analyze"):
+    def post(self, body, origin=None, route="/api/analyze", host=None, scheme=None):
         headers = {"Content-Type": "application/json"}
         if origin:
             headers["Origin"] = origin
+        if host:
+            headers["Host"] = host
+        if scheme:
+            headers["X-Forwarded-Proto"] = scheme
         request = Request(self.base + route,
                           data=json.dumps(body).encode(), headers=headers)
         try:
@@ -64,6 +69,14 @@ class HTTPTests(unittest.TestCase):
     def test_cross_origin_rejected(self):
         self.assertEqual(self.post({}, "https://example.com")[0], 403)
 
+    def test_hosted_same_origin_and_foreign_origin(self):
+        hosted = {"host": "israptama-preview.vercel.app", "scheme": "https"}
+        self.assertEqual(self.post({}, origin="https://israptama-preview.vercel.app",
+                                   **hosted)[0], 200)
+        self.assertEqual(self.post({}, origin="https://other.vercel.app",
+                                   **hosted)[0], 403)
+        self.assertEqual(self.post({}, origin="null", **hosted)[0], 403)
+
     def test_arbitrary_file_route_rejected(self):
         with self.assertRaises(HTTPError) as caught:
             urlopen(self.base + "/engine.py", timeout=3)
@@ -78,6 +91,7 @@ class HTTPTests(unittest.TestCase):
     def test_research_report_exposes_real_test_metrics(self):
         with urlopen(self.base + "/api/research", timeout=3) as response:
             report = json.load(response)
+            self.assertEqual(response.headers["Cache-Control"], "no-store")
         self.assertEqual(report["dataset"]["license"], "CC BY 4.0")
         self.assertGreater(report["splits"]["test"]["low_1_to_3"], 0)
         self.assertIn("average_precision", report["models"]["expanded"]["test"])
@@ -94,6 +108,25 @@ class HTTPTests(unittest.TestCase):
         self.assertEqual(self.post({"text": "Нан жақсы"}, route="/api/review")[0], 400)
         self.assertEqual(self.post({"text": "A good little cake"},
                                    origin="https://example.com", route="/api/review")[0], 403)
+
+    def test_vercel_entry_point_dispatches_rewritten_routes(self):
+        server = ThreadingHTTPServer(("127.0.0.1", 0), VercelHandler)
+        thread = threading.Thread(target=server.serve_forever, daemon=True)
+        thread.start()
+        base = f"http://127.0.0.1:{server.server_port}"
+        try:
+            with urlopen(base + "/api/index?route=research", timeout=3) as response:
+                self.assertIn("models", json.load(response))
+            request = Request(base + "/api/index?route=analyze",
+                              data=b'{"buffer":0}',
+                              headers={"Content-Type": "application/json",
+                                       "Origin": base})
+            with urlopen(request, timeout=10) as response:
+                self.assertTrue(json.load(response)["synthetic"])
+        finally:
+            server.shutdown()
+            server.server_close()
+            thread.join(timeout=3)
 
 
 if __name__ == "__main__":

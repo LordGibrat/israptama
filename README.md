@@ -4,7 +4,7 @@
 
 An AI-assisted decision-support prototype for small bakeries in Kazakhstan. It forecasts sales, recommends daily baking quantities, and makes the tradeoff between unsold stock and unmet demand visible. A separate NLP view compares two models that flag low-rated English recipe feedback. The interface is in Kazakh; the documentation is in English.
 
-**Status:** working local prototype. Planning is evaluated on synthetic sales; the separate NLP study uses real open recipe-review text. No real bakery pilot or verified savings yet.
+**Status:** working prototype for local use and Vercel hosting. Planning is evaluated on synthetic sales; the separate NLP study uses real open recipe-review text. No real bakery pilot or verified savings yet.
 
 **Customer discovery:** initial outreach to five bakeries in Astana; responses and real-data validation are pending.
 
@@ -23,7 +23,7 @@ Independent student project inspired by the publicly described Afresh workflow: 
 - A transparent comparison of forecast error, simulated contribution profit, and unsold units.
 - CSV upload, plan download, JSON evaluation export, and a reproducible synthetic dataset.
 - A separate interactive review triage view backed by a recipe-disjoint, reproducible NLP experiment; it never changes production recommendations.
-- Local-only processing with no account, telemetry, external API, or uploaded-file persistence.
+- No account, app telemetry, external inference API, or uploaded-file persistence. The hosted demo processes CSV and review inputs in Vercel Functions; the local run processes them on your machine.
 
 ## Quick start
 
@@ -42,7 +42,13 @@ python app.py
 
 Open [http://localhost:8765](http://localhost:8765). No API key or account is required. Keep the terminal running. Stop with Ctrl+C.
 
-Select **Пікірлер** for the English review experiment. The two example comments are invented for the interface, while the displayed evaluation figures come from the real open dataset. Review text is processed locally in memory and is not saved.
+Select **Пікірлер** for the English review experiment. The two example comments are invented for the interface, while the displayed evaluation figures come from the real open dataset. Review text is processed in memory and is not saved by the app. On the hosted demo it is sent to Vercel for processing; on localhost it stays on your machine.
+
+## Vercel deployment
+
+The hosted version serves only the files in `public/` and runs the API through `api/index.py` as a Python Function. CSV and review text are sent to that function and processed in memory; the app does not save them. Use the synthetic sample for a public demonstration and run locally for private bakery data. The hosted site needs no account or API key.
+
+`vercel.json` maps the six API paths to the shared Python handler, keeps research model artifacts in the function bundle, and applies security headers to static files. The original `python app.py` workflow remains available.
 
 ## NLP research (Assignment #2, Option A)
 
@@ -111,8 +117,9 @@ Public inspiration: https://www.afresh.com/departments/bakery
 ## Repository guide
 
 - `engine.py`: validation, Ridge forecasting, cost-sensitive production planning, evaluation.
-- `app.py`: localhost HTTP server and in-memory CSV processing.
-- `static/`: responsive Kazakh UI, styles, and original SVG illustrations.
+- `app.py`: shared HTTP API and localhost server; CSV input is processed in memory.
+- `api/index.py`, `vercel.json`: Vercel function entry point and routing/security configuration.
+- `public/`: responsive Kazakh UI, styles, and original artwork served as static files.
 - `tests/`: forecasting, research-protocol and HTTP integration tests.
 - `review_model.py`, `research/`: text-only classifier, reproducible experiment, model artifacts and measured results.
 - `NLP_RESEARCH.md`: research protocol, results, attribution and limitations.

@@ -1,0 +1,33 @@
+{
+  "$schema": "https://openapi.vercel.sh/vercel.json",
+  "framework": null,
+  "functions": {
+    "api/index.py": {
+      "maxDuration": 60,
+      "includeFiles": "research/artifacts/**",
+      "excludeFiles": "{tests/**,presentation/**,data/**,preview-*.png,research/cache/**,public/**}"
+    }
+  },
+  "rewrites": [
+    {"source": "/api/sample", "destination": "/api/index?route=sample"},
+    {"source": "/api/research", "destination": "/api/index?route=research"},
+    {"source": "/api/sample.csv", "destination": "/api/index?route=sample.csv"},
+    {"source": "/api/template.csv", "destination": "/api/index?route=template.csv"},
+    {"source": "/api/analyze", "destination": "/api/index?route=analyze"},
+    {"source": "/api/review", "destination": "/api/index?route=review"}
+  ],
+  "headers": [
+    {
+      "source": "/(.*)",
+      "headers": [
+        {"key": "Content-Security-Policy", "value": "default-src 'self'; style-src 'self'; script-src 'self'; img-src 'self' data:; connect-src 'self'; object-src 'none'; base-uri 'none'; frame-ancestors 'none'"},
+        {"key": "X-Content-Type-Options", "value": "nosniff"},
+        {"key": "Referrer-Policy", "value": "strict-origin-when-cross-origin"}
+      ]
+    },
+    {
+      "source": "/api/(.*)",
+      "headers": [{"key": "Cache-Control", "value": "no-store"}]
+    }
+  ]
+}
