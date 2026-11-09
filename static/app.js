@@ -108,15 +108,15 @@ function renderChart(rows) {
   let svg=`<svg viewBox="0 0 ${width} ${height}" role="img" aria-label="21 күндегі сұраныс, модель және өткен апта болжамының графигі"><title>Сұраныс пен болжам салыстыруы</title>`;
   for(let i=0;i<5;i++){
     const value=ceiling*i/4;
-    svg+=`<line x1="${left}" y1="${y(value)}" x2="${width-right}" y2="${y(value)}" stroke="#e7dfd2"/><text x="${left-8}" y="${y(value)+4}" text-anchor="end" fill="#796c5e" font-size="10">${Math.round(value)}</text>`;
+    svg+=`<line x1="${left}" y1="${y(value)}" x2="${width-right}" y2="${y(value)}" stroke="#e5d8c8"/><text x="${left-8}" y="${y(value)+4}" text-anchor="end" fill="#715f53" font-size="10">${Math.round(value)}</text>`;
   }
   const points=(key)=>rows.map((r,i)=>`${x(i)},${y(r[key])}`).join(' ');
-  svg+=`<polygon points="${left},${y(0)} ${points('actual')} ${width-right},${y(0)}" fill="#f3e6cd"/>`;
-  for(const [key,color,dash] of [['actual','#b89857',''],['baseline','#8b8e79','4 5'],['model','#a34e32','']]){
+  svg+=`<polygon points="${left},${y(0)} ${points('actual')} ${width-right},${y(0)}" fill="#f5e8d5"/>`;
+  for(const [key,color,dash] of [['actual','#b9894c',''],['baseline','#81906c','4 5'],['model','#963e29','']]){
     svg+=`<polyline points="${points(key)}" fill="none" stroke="${color}" stroke-width="${key==='model'?2.5:1.6}" stroke-dasharray="${dash}" stroke-linejoin="round"/>`;
   }
   for(const i of [0,5,10,15,20]){
-    svg+=`<text x="${x(i)}" y="${height-10}" text-anchor="middle" fill="#796c5e" font-size="10">${rows[i].date.slice(5).replace('-','/')}</text>`;
+    svg+=`<text x="${x(i)}" y="${height-10}" text-anchor="middle" fill="#715f53" font-size="10">${rows[i].date.slice(5).replace('-','/')}</text>`;
   }
   $('#chart').innerHTML=svg+'</svg>';
 }
@@ -135,6 +135,7 @@ function render(result) {
   const quantity=result.products.reduce((total,p)=>total+p.quantity,0);
   const demand=result.products.reduce((total,p)=>total+p.forecast,0);
   const cost=result.products.reduce((total,p)=>total+p.production_cost,0);
+  $('#hero-quantity-value').textContent=`${number(quantity)} дана`;
   $('#plan-stats').innerHTML=stat('Пісіруге ұсынылатын көлем',`${number(quantity)} дана`,'Барлық өнімдер бойынша',true)+stat('Сұраныс болжамы',`${number(demand)} дана`,'Болжам; нақты тапсырыс емес')+stat('Жоспарланған өндіріс құны',money(cost),'Өнімдердің айнымалы өзіндік құны');
   const productArt=(name)=>({ 'Круассан':'croissant','Нан':'bread','Самса':'samsa' }[name]);
   $('#products').innerHTML=result.products.map((p)=>`<tr><td><div class="product-name"><span class="product-icon" aria-hidden="true">${productArt(p.name)?`<img src="/assets/${productArt(p.name)}.svg" alt="" width="52" height="44">`:'✳'}</span><span>${escapeHTML(p.name)}<small>БАҒАСЫ ${money(p.price)}</small></span></div></td><td data-label="Сұраныс болжамы">${number(p.forecast)} дана</td><td data-label="Болжам ауқымы">${number(p.lower)}–${number(p.upper)}</td><td data-label="Пісіру ұсынысы"><span class="quantity-pill">${number(p.quantity)} дана</span></td><td data-label="Өндіріс құны">${money(p.production_cost)}</td></tr>`).join('');

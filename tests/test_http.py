@@ -69,6 +69,12 @@ class HTTPTests(unittest.TestCase):
             urlopen(self.base + "/engine.py", timeout=3)
         self.assertEqual(caught.exception.code, 404)
 
+    def test_local_bakery_photo_is_served_as_jpeg(self):
+        with urlopen(self.base + "/assets/bakery-hero.jpg", timeout=3) as response:
+            self.assertEqual(response.status, 200)
+            self.assertEqual(response.headers.get_content_type(), "image/jpeg")
+            self.assertEqual(response.read(3), b"\xff\xd8\xff")
+
     def test_research_report_exposes_real_test_metrics(self):
         with urlopen(self.base + "/api/research", timeout=3) as response:
             report = json.load(response)

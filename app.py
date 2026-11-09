@@ -47,13 +47,15 @@ class Handler(BaseHTTPRequestHandler):
                        "/app.js": ("app.js", "application/javascript"),
                        "/style.css": ("style.css", "text/css"),
                        "/bakery.css": ("bakery.css", "text/css"),
+                       "/assets/bakery-hero.jpg": ("assets/bakery-hero.jpg", "image/jpeg"),
                        **{f"/assets/{name}.svg": (f"assets/{name}.svg", "image/svg+xml")
                           for name in ("bakery-tray", "croissant", "bread", "samsa")}}
             if route not in allowed:
                 self.json(404, {"error": "Бет табылмады."})
                 return
             filename, kind = allowed[route]
-            self.send(200, (STATIC / filename).read_bytes(), kind + "; charset=utf-8")
+            content_type = kind if kind.startswith("image/") else kind + "; charset=utf-8"
+            self.send(200, (STATIC / filename).read_bytes(), content_type)
 
     def do_POST(self) -> None:
         route = urlparse(self.path).path

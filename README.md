@@ -10,7 +10,7 @@ An AI-assisted decision-support prototype for small bakeries in Kazakhstan. It f
 
 ![Israptama bakery planning dashboard](preview-desktop.png)
 
-[Quick start](#quick-start) · [NLP research](#nlp-research-assignment-2-option-a) · [Planning results](#initial-experiment) · [Presentation](presentation/index.html) · [Mobile preview](preview-mobile.png)
+[Quick start](#quick-start) · [NLP research](#nlp-research-assignment-2-option-a) · [Planning results](#initial-experiment) · [Design direction](DESIGN.md) · [Presentation](presentation/index.html) · [Mobile preview](preview-mobile.png)
 
 Independent student project inspired by the publicly described Afresh workflow: sales history → demand forecast → production recommendation → business evaluation. No affiliation with Afresh and no access to its code, models, or customer data.
 

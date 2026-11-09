@@ -1,9 +1,11 @@
 # Israptama design direction
 
-Reference research, 2026-10-13:
-- [Lamanna Bakery on Lapa Ninja](https://www.lapa.ninja/post/lamannabakery/): expressive typography, food-led illustration and warm colors. Reviewed the curated full-page reference and live bakery homepage.
-- [Bernice Bakery on Awwwards](https://www.awwwards.com/sites/bernice-bakery): playful food illustration and interaction as a recognizable brand layer.
+Reference research, 2026-11-09:
 
-Adaptation for a daily operations tool: flour-cream background, cocoa text, terracotta actions, restrained olive secondary accents, serif headings, and original SVG baked goods. Horizontal navigation makes room for the production plan. Product thumbnails help identify items; mobile layouts show recommendations as readable rows. Reduced-motion preferences are respected.
+- [Lamanna Bakery on Awwwards](https://www.awwwards.com/inspiration/lamanna-bakery-1) and [Lapa Ninja](https://www.lapa.ninja/post/lamannabakery/): generous food imagery, expressive editorial type, and a warm bakery identity.
+- [Agrumea Farm on Awwwards](https://www.awwwards.com/sites/agrumea-farm): a tight, confident warm palette and large type.
+- [Redbrick Coffee on Lapa Ninja](https://www.lapa.ninja/post/redbrick-coffee-2/): tactile product photography paired with restrained interface detail.
 
-All SVG illustrations in `static/assets/` are original artwork created for this project, not copied from the reference websites. System fonts keep the app offline-capable. No new runtime dependencies or external image/font services.
+The dashboard adapts those principles to a daily production tool: a cocoa-colored editorial hero, an original generated bakery still life, cream and terracotta surfaces, visible product thumbnails, and compact planning cards immediately below the hero. Secondary views use the same heading panel, type scale, and palette. The chart lines match their legend. On phones, five navigation destinations use a legible two-row layout and key figures use readable cards.
+
+The hero image in `static/assets/bakery-hero.jpg` was generated for this project from a bakery still-life prompt and compressed for fast loading. It illustrates the product category; it does not depict actual bakery inventory. All SVG product illustrations in `static/assets/` are also original artwork. No imagery or code was copied from the reference sites. System fonts and local assets keep the app usable offline, without external image or font services. Keyboard focus and reduced-motion preferences are supported.
