@@ -14,3 +14,5 @@ work/
 *.zip
 # Keep synthetic demo data; keep private bakery data outside this repository.
 data/private/
+.codegraph/
+research/cache/

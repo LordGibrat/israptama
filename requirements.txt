@@ -1,2 +1,7 @@
-# Version used for the included reproducible experiment and local test run.
+# Pinned for the forecasting demo and the reproducible recipe-review experiment.
 numpy==2.3.5
+scipy==1.17.1
+scikit-learn==1.9.1
+joblib==1.6.0
+threadpoolctl==3.8.0
+narwhals==2.26.0

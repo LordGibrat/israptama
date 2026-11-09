@@ -1,15 +1,17 @@
-"""Local-only HTTP app; uploaded CSV is processed in memory and never saved."""
+"""HTTP app; uploaded CSV is processed in memory and never saved by the app."""
 from __future__ import annotations
 
 import argparse
 import json
+import os
 from http.server import BaseHTTPRequestHandler, ThreadingHTTPServer
 from pathlib import Path
 from urllib.parse import urlparse
 
 from engine import FIELDS, analyze, export_csv, parse_csv, sample_rows
+from review_model import classify_review, public_study
 
-STATIC = Path(__file__).parent / "static"
+STATIC = Path(__file__).parent / "public"
 
 
 class Handler(BaseHTTPRequestHandler):
@@ -33,6 +35,8 @@ class Handler(BaseHTTPRequestHandler):
         route = urlparse(self.path).path
         if route == "/api/sample":
             self.json(200, analyze(sample_rows(), synthetic=True))
+        elif route == "/api/research":
+            self.json(200, public_study())
         elif route in ("/api/sample.csv", "/api/template.csv"):
             content = (export_csv(sample_rows()) if route.endswith("sample.csv")
                        else ",".join(FIELDS) + "\n2026-07-01,Нан,100,85,400,160\n")
@@ -41,38 +45,50 @@ class Handler(BaseHTTPRequestHandler):
             self.send(204, b"", "image/x-icon")
         else:
             allowed = {"/": ("index.html", "text/html"),
+                       "/presentation.html": ("presentation.html", "text/html"),
+                       "/presentation.css": ("presentation.css", "text/css"),
+                       "/presentation.js": ("presentation.js", "application/javascript"),
                        "/app.js": ("app.js", "application/javascript"),
                        "/style.css": ("style.css", "text/css"),
                        "/bakery.css": ("bakery.css", "text/css"),
+                       "/assets/bakery-hero.jpg": ("assets/bakery-hero.jpg", "image/jpeg"),
                        **{f"/assets/{name}.svg": (f"assets/{name}.svg", "image/svg+xml")
                           for name in ("bakery-tray", "croissant", "bread", "samsa")}}
             if route not in allowed:
                 self.json(404, {"error": "Бет табылмады."})
                 return
             filename, kind = allowed[route]
-            self.send(200, (STATIC / filename).read_bytes(), kind + "; charset=utf-8")
+            content_type = kind if kind.startswith("image/") else kind + "; charset=utf-8"
+            self.send(200, (STATIC / filename).read_bytes(), content_type)
 
     def do_POST(self) -> None:
-        if self.path != "/api/analyze":
+        route = urlparse(self.path).path
+        if route not in ("/api/analyze", "/api/review"):
             self.json(404, {"error": "Бет табылмады."})
             return
         origin = self.headers.get("Origin")
-        allowed_origins = {f"http://localhost:{self.server.server_port}",
-                           f"http://127.0.0.1:{self.server.server_port}"}
-        if origin and origin not in allowed_origins:
-            self.json(403, {"error": "Тек жергілікті қосымшаға рұқсат."})
+        host = self.headers.get("Host", "")
+        scheme = self.headers.get("X-Forwarded-Proto", "https" if os.getenv("VERCEL") else "http")
+        scheme = scheme.split(",", 1)[0].strip()
+        if origin and (scheme not in ("http", "https") or not host
+                       or origin != f"{scheme}://{host}"):
+            self.json(403, {"error": "Тек осы сайттан жіберілген сұрауға рұқсат."})
             return
         if not self.headers.get("Content-Type", "").startswith("application/json"):
             self.json(415, {"error": "JSON қажет."})
             return
         try:
             length = int(self.headers.get("Content-Length", "0"))
-            if not 0 < length <= 2_100_000:
+            limit = 2_100_000 if route == "/api/analyze" else 8_000
+            if not 0 < length <= limit:
                 self.json(413, {"error": "Файл тым үлкен немесе сұрау бос."})
                 return
             body = json.loads(self.rfile.read(length))
             if not isinstance(body, dict):
                 raise ValueError("Сұрау JSON объектісі болуы керек.")
+            if route == "/api/review":
+                self.json(200, classify_review(body.get("text")))
+                return
             csv_text = body.get("csv")
             synthetic = csv_text is None
             rows = sample_rows() if synthetic else parse_csv(csv_text)

@@ -1,0 +1,13 @@
+.ai-harness/
+.cursor/
+.mcp.json
+.codegraph/
+.venv/
+AGENTS.md
+tests/
+presentation/
+data/
+research/cache/
+research/run_experiment.py
+preview-*.png
+*.log

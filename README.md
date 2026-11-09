@@ -1,16 +1,18 @@
 # Israptama — bakery production planning prototype
 
-[![Tests](https://github.com/LordGibrat/israptama/actions/workflows/tests.yml/badge.svg)](https://github.com/LordGibrat/israptama/actions/workflows/tests.yml)
+[![Feature branch tests](https://github.com/LordGibrat/israptama/actions/workflows/tests.yml/badge.svg?branch=feature%2Fnlp-feedback-research)](https://github.com/LordGibrat/israptama/actions/workflows/tests.yml?query=branch%3Afeature%2Fnlp-feedback-research)
 
-An AI-assisted decision-support prototype for small bakeries in Kazakhstan. It forecasts sales, recommends daily baking quantities, and makes the tradeoff between unsold stock and unmet demand visible. The interface is in Kazakh; the documentation is in English.
+An AI-assisted decision-support prototype for small bakeries in Kazakhstan. It forecasts sales, recommends daily baking quantities, and makes the tradeoff between unsold stock and unmet demand visible. A separate NLP view compares two models that flag low-rated English recipe feedback. The interface is in Kazakh; the documentation is in English.
 
-**Status:** working local prototype, evaluated on synthetic data only. No real bakery pilot or verified savings yet.
+**Status:** [live prototype on Vercel](https://israptama.vercel.app/) and available for local use. Planning is evaluated on synthetic sales; the separate NLP study uses real open recipe-review text. No real bakery pilot or verified savings yet.
+
+**Assignment 2 source:** [PR #1](https://github.com/LordGibrat/israptama/pull/1) records the NLP implementation and review. Start with the [requirement-by-requirement evidence guide](ASSIGNMENT_EVIDENCE.md) when presenting it.
 
 **Customer discovery:** initial outreach to five bakeries in Astana; responses and real-data validation are pending.
 
 ![Israptama bakery planning dashboard](preview-desktop.png)
 
-[Quick start](#quick-start) · [Results](#initial-experiment) · [CSV format](#csv-input) · [Mobile preview](preview-mobile.png)
+[Quick start](#quick-start) · [NLP research](#nlp-research-assignment-2-option-a) · [Planning results](#initial-experiment) · [Design direction](DESIGN.md) · [Live presentation](https://israptama.vercel.app/presentation.html) · [Mobile preview](preview-mobile.png)
 
 Independent student project inspired by the publicly described Afresh workflow: sales history → demand forecast → production recommendation → business evaluation. No affiliation with Afresh and no access to its code, models, or customer data.
 
@@ -22,7 +24,8 @@ Independent student project inspired by the publicly described Afresh workflow: 
 - A 21-day walk-forward evaluation against a last-week same-day baseline.
 - A transparent comparison of forecast error, simulated contribution profit, and unsold units.
 - CSV upload, plan download, JSON evaluation export, and a reproducible synthetic dataset.
-- Local-only processing with no account, telemetry, external API, or uploaded-file persistence.
+- A separate interactive review triage view backed by a recipe-disjoint, reproducible NLP experiment; it never changes production recommendations.
+- No account, app telemetry, external inference API, or uploaded-file persistence. The hosted demo processes CSV and review inputs in Vercel Functions; the local run processes them on your machine.
 
 ## Quick start
 
@@ -40,6 +43,30 @@ python app.py
 ```
 
 Open [http://localhost:8765](http://localhost:8765). No API key or account is required. Keep the terminal running. Stop with Ctrl+C.
+
+Select **Пікірлер** for the English review experiment. The two example comments are invented for the interface, while the displayed evaluation figures come from the real open dataset. Review text is processed in memory and is not saved by the app. On the hosted demo it is sent to Vercel for processing; on localhost it stays on your machine.
+
+## Vercel deployment
+
+The [live demo](https://israptama.vercel.app/) serves only the files in `public/` and runs the API through `api/index.py` as a Python Function. CSV and review text are sent to that function and processed in memory; the app does not save them. Use the synthetic sample for a public demonstration and run locally for private bakery data. The hosted site needs no account or API key.
+
+`vercel.json` maps the six API paths to the shared Python handler, keeps research model artifacts in the function bundle, and applies security headers to static files. The original `python app.py` workflow remains available.
+
+The current Vercel project was published by uploading the feature-branch source files. It is not connected to the GitHub repository, so new commits do not deploy automatically; redeploy the updated source or grant the Vercel Git integration access to `LordGibrat/israptama` first.
+
+## NLP research (Assignment #2, Option A)
+
+The study uses the [UCI Recipe Reviews and User Feedback dataset](https://archive.ics.uci.edu/dataset/911/recipe+reviews+and+user+feedback+dataset) (CC BY 4.0). It predicts **1–3 versus 4–5-star ratings** from English review text on 38 bakery-like recipes. After cleaning, 5,984 reviews remain. Recipe groups are separated into train (25 recipes), validation (6), and untouched test (7); identical normalized text is removed before splitting. Both arms use the same class-weighted logistic regression. The changed arm adds character 3–5-gram TF-IDF to a word-unigram baseline.
+
+On 1,174 held-out reviews, low-rating F1 was **0.493** for words only and **0.511** with character features; average precision was **0.518** and **0.558**, respectively. The F1 gain is uncertain: a recipe-cluster bootstrap 95% interval for the difference is **−0.066 to +0.080**. The baseline is the live headline model because its validation F1 was marginally higher; the interface exposes both. These results do not measure bakery demand or validate Kazakh reviews.
+
+Reproduce the experiment after installing `requirements.txt`:
+
+```bash
+python research/run_experiment.py --check
+```
+
+This downloads and checksum-checks the 2.1 MB UCI archive, retrains both models, and checks the recorded split and metrics. See [NLP_RESEARCH.md](NLP_RESEARCH.md) for the full protocol, confusion matrices, limitations, source attribution, and artifacts. The [7-minute presentation](https://israptama.vercel.app/presentation.html) also works offline when `public/presentation.html`, `public/presentation.css`, and `public/presentation.js` stay together; [speaker notes / 2–3-minute Q&A](presentation/NOTES.md) are in the repository.
 
 ## Initial experiment
 
@@ -94,9 +121,13 @@ Public inspiration: https://www.afresh.com/departments/bakery
 ## Repository guide
 
 - `engine.py`: validation, Ridge forecasting, cost-sensitive production planning, evaluation.
-- `app.py`: localhost HTTP server and in-memory CSV processing.
-- `static/`: responsive Kazakh UI, styles, and original SVG illustrations.
-- `tests/`: 24 calculation and HTTP integration tests.
+- `app.py`: shared HTTP API and localhost server; CSV input is processed in memory.
+- `api/index.py`, `vercel.json`: Vercel function entry point and routing/security configuration.
+- `public/`: responsive Kazakh UI, styles, original artwork, and the self-contained presentation served as static files.
+- `tests/`: forecasting, research-protocol and HTTP integration tests.
+- `review_model.py`, `research/`: text-only classifier, reproducible experiment, model artifacts and measured results.
+- `NLP_RESEARCH.md`: research protocol, results, attribution and limitations.
+- `presentation/`: speaker notes and Q&A for `public/presentation.html`.
 - `data/`: explicitly labeled synthetic data and evaluation results.
 - `.github/workflows/tests.yml`: automated test configuration for GitHub, with action versions pinned to verified commit hashes. View runs in the repository's Actions tab.
 - [DESIGN.md](DESIGN.md): visual references and artwork attribution.
