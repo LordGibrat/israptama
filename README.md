@@ -6,7 +6,7 @@ An AI-assisted decision-support prototype for small bakeries in Kazakhstan. It f
 
 **Status:** [live prototype on Vercel](https://israptama.vercel.app/) and available for local use. Planning is evaluated on synthetic sales; the separate NLP study uses real open recipe-review text. No real bakery pilot or verified savings yet.
 
-**Assignment 2 source:** the NLP version is in [open PR #1](https://github.com/LordGibrat/israptama/pull/1), not yet in `main`. Start with the [requirement-by-requirement evidence guide](ASSIGNMENT_EVIDENCE.md) when presenting it.
+**Assignment 2 source:** [PR #1](https://github.com/LordGibrat/israptama/pull/1) records the NLP implementation and review. Start with the [requirement-by-requirement evidence guide](ASSIGNMENT_EVIDENCE.md) when presenting it.
 
 **Customer discovery:** initial outreach to five bakeries in Astana; responses and real-data validation are pending.
 

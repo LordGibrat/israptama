@@ -49,7 +49,7 @@ The local checks are 24 unit/integration tests, Python compilation, and JavaScri
 
 Route: complex → inspect application and deployment constraints → adapt shared API and static assets → test and review → publish → verify public deployment. ECC deployment and security guidance, CodeGraph, independent review, and a browser verification loop materially informed this work.
 
-Published the feature-branch version at https://israptama.vercel.app/. Vercel built a Python 3.13 function and served the dashboard and assets publicly. The repository's GitHub integration is not authorized in this Vercel account; the project was deployed from an explicit source-file upload, so future pushes require a new deployment until Git integration is connected. The GitHub PR remains open and unmerged.
+Published the feature-branch version at https://israptama.vercel.app/. Vercel built a Python 3.13 function and served the dashboard and assets publicly. The repository's GitHub integration is not authorized in this Vercel account; the project was deployed from an explicit source-file upload, so future pushes require a new deployment until Git integration is connected. The GitHub PR was open and unmerged at this stage.
 
 Checks passed: 34 Python tests, JavaScript syntax, `vercel.json` JSON parsing, and `git diff --check`. Live requests returned 200 for the dashboard, hero image, research metadata, analysis, review classification, and sample/template CSV downloads. Same-origin hosted POSTs worked and returned `Cache-Control: no-store`; malformed JSON returned 400, foreign or null Origin 403, unsupported media type 415, and oversized review body 413. Source/config URLs (`/engine.py`, `/research/artifacts/results.json`, `/.mcp.json`) returned 404.
 
@@ -59,7 +59,7 @@ After adding the public link to the presentation, slide 7 was opened in a browse
 
 ## Assignment 2 strict review and live slides — 2026-11-09
 
-Route: complex → read the actual one-page assignment PDF → independent research and demo reviews → fix presentation access and readability → test → redeploy → verify. The PDF contains no point weights or requirement for a GitHub contribution count, so no numeric grade or 100% outcome is predicted. Its remaining administrative action is selecting a presentation slot with the student's ICT Lab Instructor. The open PR and feature branch contain the NLP work; `main` still has the earlier planning app.
+Route: complex → read the actual one-page assignment PDF → independent research and demo reviews → fix presentation access and readability → test → redeploy → verify. The PDF contains no point weights or requirement for a GitHub contribution count, so no numeric grade or 100% outcome is predicted. Its remaining administrative action is selecting a presentation slot with the student's ICT Lab Instructor. At the time of this check, the open PR and feature branch contained the NLP work while `main` still had the earlier planning app.
 
 The research audit reran `python research/run_experiment.py --check` successfully against the pinned UCI archive and found no definite recipe or exact-text leakage. The expanded candidate's test F1 gain remains uncertain, and the classifier settings are unchanged while the pipeline's text representation changes. [ASSIGNMENT_EVIDENCE.md](ASSIGNMENT_EVIDENCE.md) maps every stated assignment requirement to inspectable evidence and records this interpretation risk.
 

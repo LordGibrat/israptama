@@ -1,6 +1,6 @@
 # Assignment 2 evidence and presentation checklist
 
-This guide points the ICT Lab Instructor to the version of Israptama prepared for Assignment 2. The [open pull request](https://github.com/LordGibrat/israptama/pull/1) and its `feature/nlp-feedback-research` branch contain the NLP work; the repository's default `main` branch still contains the earlier planning prototype. The [live MVP](https://israptama.vercel.app/) runs the feature-branch application. The assignment PDF gives requirements but no weighted scoring rubric, so this guide does not predict a percentage.
+This guide points the ICT Lab Instructor to the version of Israptama prepared for Assignment 2. [Pull request #1](https://github.com/LordGibrat/israptama/pull/1) records the NLP work and its review, and the [live MVP](https://israptama.vercel.app/) runs the tested application. The assignment PDF gives requirements but no weighted scoring rubric, so this guide does not predict a percentage.
 
 | Assignment requirement | Evidence to show | Qualification |
 | --- | --- | --- |
@@ -19,4 +19,4 @@ This guide points the ICT Lab Instructor to the version of Israptama prepared fo
 3. If internet access fails, run `python app.py --port 8765` after installing `requirements.txt`, and use `http://localhost:8765`. The deck itself opens offline.
 4. For questions about leakage or reproducibility, show [NLP_RESEARCH.md](NLP_RESEARCH.md), `research/artifacts/results.json`, the experiment script, and the green [feature-branch tests](https://github.com/LordGibrat/israptama/actions/workflows/tests.yml?query=branch%3Afeature%2Fnlp-feedback-research).
 
-The assignment PDF says nothing needs to be uploaded to its assignment box. Confirm the presentation slot with the instructor and use the PR link when sharing the source, since `main` has not been merged.
+The assignment PDF says nothing needs to be uploaded to its assignment box. Confirm the presentation slot with the instructor and use the repository and PR links when sharing the source.
