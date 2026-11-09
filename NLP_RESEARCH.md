@@ -58,7 +58,7 @@ python -m unittest discover -s tests -v
 python app.py
 ```
 
-`--check` downloads the pinned dataset into ignored `research/cache/`, retrains both arms, and checks the recorded partitions, selection and metrics. Run without `--check` to regenerate `research/artifacts/results.json`, `baseline.joblib`, `expanded.joblib`, and `test_predictions.csv`. The prediction CSV holds text hashes, recipe codes, true labels and both model scores; it does not republish review text. The two `.joblib` files are trusted local build artifacts, never loaded from an upload. Open `http://localhost:8765` and select **Пікірлер** to try the interactive MVP. The offline [presentation](presentation/index.html) and [speaker notes / Q&A](presentation/NOTES.md) cover the 7-minute talk.
+`--check` downloads the pinned dataset into ignored `research/cache/`, retrains both arms, and checks the recorded partitions, selection and metrics. Run without `--check` to regenerate `research/artifacts/results.json`, `baseline.joblib`, `expanded.joblib`, and `test_predictions.csv`. The prediction CSV holds text hashes, recipe codes, true labels and both model scores; it does not republish review text. The two `.joblib` files are trusted local build artifacts, never loaded from an upload. Open `http://localhost:8765` and select **Пікірлер** to try the interactive MVP. The [presentation](https://israptama.vercel.app/presentation.html) (offline bundle: `public/presentation.*`) and [speaker notes / Q&A](presentation/NOTES.md) cover the 7-minute talk.
 
 ## Interpretation and limitations
 

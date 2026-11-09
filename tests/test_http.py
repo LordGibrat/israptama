@@ -88,6 +88,23 @@ class HTTPTests(unittest.TestCase):
             self.assertEqual(response.headers.get_content_type(), "image/jpeg")
             self.assertEqual(response.read(3), b"\xff\xd8\xff")
 
+    def test_presentation_is_served_with_live_demo_and_source_links(self):
+        with urlopen(self.base + "/presentation.html", timeout=3) as response:
+            self.assertEqual(response.status, 200)
+            self.assertEqual(response.headers.get_content_type(), "text/html")
+            deck = response.read().decode("utf-8")
+        self.assertIn("https://israptama.vercel.app/", deck)
+        self.assertIn("https://github.com/LordGibrat/israptama/pull/1", deck)
+        self.assertIn('href="presentation.css"', deck)
+        self.assertIn('src="presentation.js"', deck)
+        self.assertNotIn("<style>", deck)
+        self.assertNotIn("<script>", deck)
+        for name, kind in (("presentation.css", "text/css"),
+                           ("presentation.js", "application/javascript")):
+            with self.subTest(name=name), urlopen(self.base + "/" + name, timeout=3) as response:
+                self.assertEqual(response.status, 200)
+                self.assertEqual(response.headers.get_content_type(), kind)
+
     def test_research_report_exposes_real_test_metrics(self):
         with urlopen(self.base + "/api/research", timeout=3) as response:
             report = json.load(response)

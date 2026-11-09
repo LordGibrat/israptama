@@ -45,6 +45,9 @@ class Handler(BaseHTTPRequestHandler):
             self.send(204, b"", "image/x-icon")
         else:
             allowed = {"/": ("index.html", "text/html"),
+                       "/presentation.html": ("presentation.html", "text/html"),
+                       "/presentation.css": ("presentation.css", "text/css"),
+                       "/presentation.js": ("presentation.js", "application/javascript"),
                        "/app.js": ("app.js", "application/javascript"),
                        "/style.css": ("style.css", "text/css"),
                        "/bakery.css": ("bakery.css", "text/css"),

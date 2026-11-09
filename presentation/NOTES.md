@@ -1,6 +1,6 @@
 # Israptama · Assignment #2 presentation notes
 
-Open `presentation/index.html` in any modern browser. The deck is self-contained and works offline. Use **← / →**, **Page Up / Page Down**, **Space**, the on-screen controls, or swipe. Press **Home** to restart. Keep the [live dashboard](https://israptama.vercel.app/) open in another tab for slide 7. For an offline presentation, run `python app.py --port 8765` first and open `http://localhost:8765` instead.
+Open the [live slide deck](https://israptama.vercel.app/presentation.html) in any modern browser. For offline use, keep `public/presentation.html`, `public/presentation.css`, and `public/presentation.js` together, or run `python app.py --port 8765` and open `http://localhost:8765/presentation.html`. Use **← / →**, **Page Up / Page Down**, **Space**, the on-screen controls, or swipe. Press **Home** to restart. Keep the [live dashboard](https://israptama.vercel.app/) open in another tab for slide 7; the local dashboard at `http://localhost:8765` is the offline alternative.
 
 The eight slide timings total **7:00**. Rehearse the switch to the live tab; slide 7 reserves roughly 30 seconds for interaction. The deck is in English, while the current dashboard labels are in Kazakh.
 

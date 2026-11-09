@@ -1,16 +1,18 @@
 # Israptama — bakery production planning prototype
 
-[![Tests](https://github.com/LordGibrat/israptama/actions/workflows/tests.yml/badge.svg)](https://github.com/LordGibrat/israptama/actions/workflows/tests.yml)
+[![Feature branch tests](https://github.com/LordGibrat/israptama/actions/workflows/tests.yml/badge.svg?branch=feature%2Fnlp-feedback-research)](https://github.com/LordGibrat/israptama/actions/workflows/tests.yml?query=branch%3Afeature%2Fnlp-feedback-research)
 
 An AI-assisted decision-support prototype for small bakeries in Kazakhstan. It forecasts sales, recommends daily baking quantities, and makes the tradeoff between unsold stock and unmet demand visible. A separate NLP view compares two models that flag low-rated English recipe feedback. The interface is in Kazakh; the documentation is in English.
 
 **Status:** [live prototype on Vercel](https://israptama.vercel.app/) and available for local use. Planning is evaluated on synthetic sales; the separate NLP study uses real open recipe-review text. No real bakery pilot or verified savings yet.
 
+**Assignment 2 source:** the NLP version is in [open PR #1](https://github.com/LordGibrat/israptama/pull/1), not yet in `main`. Start with the [requirement-by-requirement evidence guide](ASSIGNMENT_EVIDENCE.md) when presenting it.
+
 **Customer discovery:** initial outreach to five bakeries in Astana; responses and real-data validation are pending.
 
 ![Israptama bakery planning dashboard](preview-desktop.png)
 
-[Quick start](#quick-start) · [NLP research](#nlp-research-assignment-2-option-a) · [Planning results](#initial-experiment) · [Design direction](DESIGN.md) · [Presentation](presentation/index.html) · [Mobile preview](preview-mobile.png)
+[Quick start](#quick-start) · [NLP research](#nlp-research-assignment-2-option-a) · [Planning results](#initial-experiment) · [Design direction](DESIGN.md) · [Live presentation](https://israptama.vercel.app/presentation.html) · [Mobile preview](preview-mobile.png)
 
 Independent student project inspired by the publicly described Afresh workflow: sales history → demand forecast → production recommendation → business evaluation. No affiliation with Afresh and no access to its code, models, or customer data.
 
@@ -64,7 +66,7 @@ Reproduce the experiment after installing `requirements.txt`:
 python research/run_experiment.py --check
 ```
 
-This downloads and checksum-checks the 2.1 MB UCI archive, retrains both models, and checks the recorded split and metrics. See [NLP_RESEARCH.md](NLP_RESEARCH.md) for the full protocol, confusion matrices, limitations, source attribution, and artifacts. The [7-minute presentation](presentation/index.html) and [speaker notes / 2–3-minute Q&A](presentation/NOTES.md) are ready to use offline.
+This downloads and checksum-checks the 2.1 MB UCI archive, retrains both models, and checks the recorded split and metrics. See [NLP_RESEARCH.md](NLP_RESEARCH.md) for the full protocol, confusion matrices, limitations, source attribution, and artifacts. The [7-minute presentation](https://israptama.vercel.app/presentation.html) also works offline when `public/presentation.html`, `public/presentation.css`, and `public/presentation.js` stay together; [speaker notes / 2–3-minute Q&A](presentation/NOTES.md) are in the repository.
 
 ## Initial experiment
 
@@ -121,11 +123,11 @@ Public inspiration: https://www.afresh.com/departments/bakery
 - `engine.py`: validation, Ridge forecasting, cost-sensitive production planning, evaluation.
 - `app.py`: shared HTTP API and localhost server; CSV input is processed in memory.
 - `api/index.py`, `vercel.json`: Vercel function entry point and routing/security configuration.
-- `public/`: responsive Kazakh UI, styles, and original artwork served as static files.
+- `public/`: responsive Kazakh UI, styles, original artwork, and the self-contained presentation served as static files.
 - `tests/`: forecasting, research-protocol and HTTP integration tests.
 - `review_model.py`, `research/`: text-only classifier, reproducible experiment, model artifacts and measured results.
 - `NLP_RESEARCH.md`: research protocol, results, attribution and limitations.
-- `presentation/`: offline slide deck and speaker notes.
+- `presentation/`: speaker notes and Q&A for `public/presentation.html`.
 - `data/`: explicitly labeled synthetic data and evaluation results.
 - `.github/workflows/tests.yml`: automated test configuration for GitHub, with action versions pinned to verified commit hashes. View runs in the repository's Actions tab.
 - [DESIGN.md](DESIGN.md): visual references and artwork attribution.
