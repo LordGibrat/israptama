@@ -1,6 +1,6 @@
 # Israptama · Assignment #2 presentation notes
 
-Open `presentation/index.html` in any modern browser. The deck is self-contained and works offline. Use **← / →**, **Page Up / Page Down**, **Space**, the on-screen controls, or swipe. Press **Home** to restart. Run the dashboard separately with `python app.py --port 8765` before the talk, then keep `http://localhost:8765` open in another tab for slide 7.
+Open `presentation/index.html` in any modern browser. The deck is self-contained and works offline. Use **← / →**, **Page Up / Page Down**, **Space**, the on-screen controls, or swipe. Press **Home** to restart. Keep the [live dashboard](https://israptama.vercel.app/) open in another tab for slide 7. For an offline presentation, run `python app.py --port 8765` first and open `http://localhost:8765` instead.
 
 The eight slide timings total **7:00**. Rehearse the switch to the live tab; slide 7 reserves roughly 30 seconds for interaction. The deck is in English, while the current dashboard labels are in Kazakh.
 
@@ -32,7 +32,7 @@ The eight slide timings total **7:00**. Rehearse the switch to the live tab; sli
 
 ### 7 · Live MVP · 5:15–6:15
 
-“Now I’ll show the research in the product.” Switch to the localhost tab. Open **Пікірлер**. Select the example English review or paste: “The banana bread was dry and had very little flavor.” Submit it. Point to the two model outputs, then the measured comparison and the warning that these are English recipe-review signals. Return to **Пісіру жоспары** to show the existing plan still works and is not altered by review text. “The owner can inspect feedback without mistaking it for a demand forecast.” Switch back to slide 8. If the local server is unavailable, show `research/artifacts/results.json` and the source files instead; describe the slide graphic as a mock, not a live run.
+“Now I’ll show the research in the product.” Switch to the live dashboard tab (or localhost if presenting offline). Open **Пікірлер**. Select the example English review or paste: “The banana bread was dry and had very little flavor.” Submit it. Point to the two model outputs, then the measured comparison and the warning that these are English recipe-review signals. Return to **Пісіру жоспары** to show the existing plan still works and is not altered by review text. “The owner can inspect feedback without mistaking it for a demand forecast.” Switch back to slide 8. If the dashboard is unavailable, show `research/artifacts/results.json` and the source files instead; describe the slide graphic as a mock, not a live run.
 
 ### 8 · Limits and next evidence · 6:15–7:00
 

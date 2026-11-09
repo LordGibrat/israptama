@@ -4,7 +4,7 @@
 
 An AI-assisted decision-support prototype for small bakeries in Kazakhstan. It forecasts sales, recommends daily baking quantities, and makes the tradeoff between unsold stock and unmet demand visible. A separate NLP view compares two models that flag low-rated English recipe feedback. The interface is in Kazakh; the documentation is in English.
 
-**Status:** working prototype for local use and Vercel hosting. Planning is evaluated on synthetic sales; the separate NLP study uses real open recipe-review text. No real bakery pilot or verified savings yet.
+**Status:** [live prototype on Vercel](https://israptama.vercel.app/) and available for local use. Planning is evaluated on synthetic sales; the separate NLP study uses real open recipe-review text. No real bakery pilot or verified savings yet.
 
 **Customer discovery:** initial outreach to five bakeries in Astana; responses and real-data validation are pending.
 
@@ -46,9 +46,11 @@ Select **Пікірлер** for the English review experiment. The two example c
 
 ## Vercel deployment
 
-The hosted version serves only the files in `public/` and runs the API through `api/index.py` as a Python Function. CSV and review text are sent to that function and processed in memory; the app does not save them. Use the synthetic sample for a public demonstration and run locally for private bakery data. The hosted site needs no account or API key.
+The [live demo](https://israptama.vercel.app/) serves only the files in `public/` and runs the API through `api/index.py` as a Python Function. CSV and review text are sent to that function and processed in memory; the app does not save them. Use the synthetic sample for a public demonstration and run locally for private bakery data. The hosted site needs no account or API key.
 
 `vercel.json` maps the six API paths to the shared Python handler, keeps research model artifacts in the function bundle, and applies security headers to static files. The original `python app.py` workflow remains available.
+
+The current Vercel project was published by uploading the feature-branch source files. It is not connected to the GitHub repository, so new commits do not deploy automatically; redeploy the updated source or grant the Vercel Git integration access to `LordGibrat/israptama` first.
 
 ## NLP research (Assignment #2, Option A)
 

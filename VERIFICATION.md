@@ -44,3 +44,15 @@ Public repository created at https://github.com/LordGibrat/israptama with the ow
 ECC GitHub operations guided repository creation and CI readback through gh. Action v7 tag identities were verified against GitHub API and pinned to immutable commit hashes. Only project source/assets, synthetic data, tests, and documentation are published; `.git`, caches, environment files, and private data are excluded.
 
 The local checks are 24 unit/integration tests, Python compilation, and JavaScript syntax. Publication verification checks the remote main commit, repository visibility, file tree, and the first GitHub Actions run. Browser tests are intentionally not repeated because this step changes repository metadata/documentation and workflow pins only.
+
+## Vercel publication — 2026-11-09
+
+Route: complex → inspect application and deployment constraints → adapt shared API and static assets → test and review → publish → verify public deployment. ECC deployment and security guidance, CodeGraph, independent review, and a browser verification loop materially informed this work.
+
+Published the feature-branch version at https://israptama.vercel.app/. Vercel built a Python 3.13 function and served the dashboard and assets publicly. The repository's GitHub integration is not authorized in this Vercel account; the project was deployed from an explicit source-file upload, so future pushes require a new deployment until Git integration is connected. The GitHub PR remains open and unmerged.
+
+Checks passed: 34 Python tests, JavaScript syntax, `vercel.json` JSON parsing, and `git diff --check`. Live requests returned 200 for the dashboard, hero image, research metadata, analysis, review classification, and sample/template CSV downloads. Same-origin hosted POSTs worked and returned `Cache-Control: no-store`; malformed JSON returned 400, foreign or null Origin 403, unsupported media type 415, and oversized review body 413. Source/config URLs (`/engine.py`, `/research/artifacts/results.json`, `/.mcp.json`) returned 404.
+
+Visible browser checks on the public URL covered all five views, review example classification, synthetic CSV upload, buffer 0 → 10 → 0 (quantity 238 → 261 → 238), and 390 px and 320 px mobile layouts without document overflow. The final browser session had zero console errors or warnings and all observed requests completed with 200 status. These checks establish deployment behavior, not real bakery performance or validation on Kazakh reviews.
+
+After adding the public link to the presentation, slide 7 was opened in a browser at 320 px width: its Vercel address and controls were visible without document overflow. The deck loaded with zero console errors or warnings.
