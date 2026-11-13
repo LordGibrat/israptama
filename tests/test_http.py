@@ -99,7 +99,7 @@ class HTTPTests(unittest.TestCase):
             self.assertEqual(response.status, 200)
             self.assertEqual(response.headers.get_content_type(), "text/html")
             deck = response.read().decode("utf-8")
-        self.assertIn("https://israptama.vercel.app/", deck)
+        self.assertEqual(deck.count('href="/" target="_blank"'), 2)
         self.assertIn('href="https://github.com/LordGibrat/israptama"', deck)
         self.assertIn('href="presentation.css"', deck)
         self.assertIn('src="presentation.js"', deck)
