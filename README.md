@@ -1,10 +1,12 @@
 # Israptama — bakery production planning prototype
 
-[![Feature branch tests](https://github.com/LordGibrat/israptama/actions/workflows/tests.yml/badge.svg?branch=feature%2Fnlp-feedback-research)](https://github.com/LordGibrat/israptama/actions/workflows/tests.yml?query=branch%3Afeature%2Fnlp-feedback-research)
+[![Main branch tests](https://github.com/LordGibrat/israptama/actions/workflows/tests.yml/badge.svg?branch=main)](https://github.com/LordGibrat/israptama/actions/workflows/tests.yml?query=branch%3Amain)
 
 An AI-assisted decision-support prototype for small bakeries in Kazakhstan. It forecasts sales, recommends daily baking quantities, and makes the tradeoff between unsold stock and unmet demand visible. A separate NLP view compares two models that flag low-rated English recipe feedback. The interface is in Kazakh; the documentation is in English.
 
 **Status:** [live prototype on Vercel](https://israptama.vercel.app/) and available for local use. Planning is evaluated on synthetic sales; the separate NLP study uses real open recipe-review text. No real bakery pilot or verified savings yet.
+
+**Pilot proposition:** A bakery with 77 or more consecutive days of baked-and-sold records can try the next-day plan, inspect the assumptions, and export the recommendation. The review view is a separate English-text research feature. A guided real-bakery pilot must measure usefulness and operating outcomes before a commercial impact claim.
 
 **Assignment 2 source:** [PR #1](https://github.com/LordGibrat/israptama/pull/1) records the NLP implementation and review. Start with the [requirement-by-requirement evidence guide](ASSIGNMENT_EVIDENCE.md) when presenting it.
 
@@ -26,6 +28,12 @@ Independent student project inspired by the publicly described Afresh workflow: 
 - CSV upload, plan download, JSON evaluation export, and a reproducible synthetic dataset.
 - A separate interactive review triage view backed by a recipe-disjoint, reproducible NLP experiment; it never changes production recommendations.
 - No account, app telemetry, external inference API, or uploaded-file persistence. The hosted demo processes CSV and review inputs in Vercel Functions; the local run processes them on your machine.
+
+## Presenting the idea
+
+The eight-slide [PowerPoint pitch](presentation/Israptama-Pitch.pptx) and [PDF backup](presentation/Israptama-Pitch.pdf) lead with the bakery owner's two decisions, show the working product early, then explain the controlled NLP experiment and its measured tradeoff. [Speaker notes](presentation/NOTES.md) provide a seven-minute English script, a live-demo path, and concise Q&A answers. The [browser deck](public/presentation.html) is keyboard and touch navigable; the hosted copy updates only after a separate Vercel redeployment.
+
+This is a pitch for a **guided pilot**, not a claim of verified savings. The requested next step is opt-in real bakery data and a comparison against the owner's current routine.
 
 ## Quick start
 
@@ -66,7 +74,7 @@ Reproduce the experiment after installing `requirements.txt`:
 python research/run_experiment.py --check
 ```
 
-This downloads and checksum-checks the 2.1 MB UCI archive, retrains both models, and checks the recorded split and metrics. See [NLP_RESEARCH.md](NLP_RESEARCH.md) for the full protocol, confusion matrices, limitations, source attribution, and artifacts. The [7-minute presentation](https://israptama.vercel.app/presentation.html) also works offline when `public/presentation.html`, `public/presentation.css`, and `public/presentation.js` stay together; [speaker notes / 2–3-minute Q&A](presentation/NOTES.md) are in the repository.
+This downloads and checksum-checks the 2.1 MB UCI archive, retrains both models, and checks the recorded split and metrics. See [NLP_RESEARCH.md](NLP_RESEARCH.md) for the full protocol, confusion matrices, limitations, source attribution, and artifacts. For offline presentation, keep the entire `public/` directory together so the deck's bakery photo and dashboard screenshot load, or use the portable PowerPoint and PDF files above.
 
 ## Initial experiment
 

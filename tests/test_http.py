@@ -88,13 +88,19 @@ class HTTPTests(unittest.TestCase):
             self.assertEqual(response.headers.get_content_type(), "image/jpeg")
             self.assertEqual(response.read(3), b"\xff\xd8\xff")
 
+    def test_local_pitch_preview_is_served_as_png(self):
+        with urlopen(self.base + "/assets/pitch-dashboard.png", timeout=3) as response:
+            self.assertEqual(response.status, 200)
+            self.assertEqual(response.headers.get_content_type(), "image/png")
+            self.assertEqual(response.read(8), b"\x89PNG\r\n\x1a\n")
+
     def test_presentation_is_served_with_live_demo_and_source_links(self):
         with urlopen(self.base + "/presentation.html", timeout=3) as response:
             self.assertEqual(response.status, 200)
             self.assertEqual(response.headers.get_content_type(), "text/html")
             deck = response.read().decode("utf-8")
         self.assertIn("https://israptama.vercel.app/", deck)
-        self.assertIn("https://github.com/LordGibrat/israptama/pull/1", deck)
+        self.assertIn('href="https://github.com/LordGibrat/israptama"', deck)
         self.assertIn('href="presentation.css"', deck)
         self.assertIn('src="presentation.js"', deck)
         self.assertNotIn("<style>", deck)

@@ -9,6 +9,8 @@ class PresentationController {
     document.getElementById('previous').addEventListener('click', () => this.go(this.index - 1));
     document.getElementById('next').addEventListener('click', () => this.go(this.index + 1));
     document.addEventListener('keydown', (event) => {
+      if (event.altKey || event.ctrlKey || event.metaKey ||
+          (event.target instanceof Element && event.target.closest('a, button, input, textarea, select, [contenteditable]'))) return;
       if (['ArrowRight', 'ArrowDown', 'PageDown', ' '].includes(event.key)) { event.preventDefault(); this.go(this.index + 1); }
       if (['ArrowLeft', 'ArrowUp', 'PageUp'].includes(event.key)) { event.preventDefault(); this.go(this.index - 1); }
       if (event.key === 'Home') { event.preventDefault(); this.go(0); }
