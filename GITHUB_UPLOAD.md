@@ -1,4 +1,4 @@
-# Upload Israptama to GitHub
+# Israptama
 
 Repository: https://github.com/LordGibrat/israptama (public).
 
