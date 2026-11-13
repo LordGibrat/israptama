@@ -52,6 +52,7 @@ class Handler(BaseHTTPRequestHandler):
                        "/style.css": ("style.css", "text/css"),
                        "/bakery.css": ("bakery.css", "text/css"),
                        "/assets/bakery-hero.jpg": ("assets/bakery-hero.jpg", "image/jpeg"),
+                       "/assets/pitch-dashboard.png": ("assets/pitch-dashboard.png", "image/png"),
                        **{f"/assets/{name}.svg": (f"assets/{name}.svg", "image/svg+xml")
                           for name in ("bakery-tray", "croissant", "bread", "samsa")}}
             if route not in allowed:

@@ -69,7 +69,7 @@ async function loadResearch() {
 
 const reviewExamples = {
   positive: 'The banana bread was moist and delicious. I would happily bake it again.',
-  critical: 'The cake was very dry and bland. The texture was disappointing and I would not make it again.',
+  critical: 'These muffins were awful. They came out dry and tasted bad. I will not make them again.',
 };
 
 function reviewChoice(candidate) {
@@ -126,8 +126,8 @@ function render(result) {
   analysis=result;
   const simulated = result.synthetic;
   const observedOnly = !simulated || result.uploaded_sample;
-  $('#source-label').textContent=simulated?'ҮЛГІ ДЕРЕКТЕР':'ЖҮКТЕЛГЕН ДЕРЕКТЕР';
-  $('#source-note').textContent=simulated?'Бұл — жасанды наубайхана. Нәтижелер нақты бизнес үнемін білдірмейді.':'Бағалау байқалған сатылымға сүйенеді. Өнім жетіспеген күндерде шынайы сұраныс белгісіз.';
+  $('#source-label').textContent=result.uploaded_sample?'ЖҮКТЕЛГЕН ЖАСАНДЫ ҮЛГІ':simulated?'ЖАСАНДЫ ТАРИХ · ДЕМО':'ЖҮКТЕЛГЕН ДЕРЕКТЕР';
+  $('#source-note').textContent=result.uploaded_sample?'Жүктелген файл — жасанды үлгі. Нәтиже нақты наубайхана үнемін білдірмейді.':simulated?`Бастапқы экран ${result.days} күндік жасанды сатылым тарихына сүйенеді. Бұл нақты бизнес нәтижесі емес.`:'Бағалау байқалған сатылымға сүйенеді. Өнім жетіспеген күндерде шынайы сұраныс белгісіз.';
   $('#workspace-name').replaceChildren(document.createTextNode(simulated?'Астана · демо наубайхана':'Жүктелген деректер'));
   const localLabel=document.createElement('small');localLabel.textContent=hosted?'Vercel-де өңделеді':'Жергілікті режим';$('#workspace-name').append(localLabel);
   $('#buffer').value=result.buffer;
@@ -156,7 +156,7 @@ function render(result) {
 
 function busy(value) {
   $('#loading').hidden=!value;
-  for(const id of ['recalculate','download-plan','download-report','reset-sample']) $( `#${id}`).disabled=value || (id.startsWith('download')&&!analysis);
+  for(const id of ['recalculate','download-plan','download-plan-ready','download-report','reset-sample']) $( `#${id}`).disabled=value || (id.startsWith('download')&&!analysis);
   $('#csv-file').disabled=value;
   $('#buffer').disabled=value;
 }
@@ -195,6 +195,14 @@ function csvCell(value) {
   return '"'+text.replaceAll('"','""')+'"';
 }
 
+function renderUploadSuccess(fileName, result) {
+  const sample = Boolean(result.synthetic);
+  $('#upload-success-title').textContent=sample?'Жасанды үлгі жүктелді. Жоспар дайын.':'Деректер жүктелді. Ертеңгі жоспар дайын.';
+  $('#upload-success-details').textContent=`${fileName} · ${number(result.rows)} жол · ${result.products.length} өнім · ${dateLabel(result.start_date)} — ${dateLabel(result.end_date)}. ${dateLabel(result.next_date)} күніне ұсыныс дайын.`;
+  $('#upload-success-note').textContent=`${sample?'Бұл — жасанды үлгі, нақты бизнес нәтижесі емес. ':''}${hosted?'Файл Vercel серверінде осы сұрау кезінде өңделеді.':'Файл осы компьютерде өңделеді.'} Қолданба сақтамайды; бетті жаңартсаңыз, қайта жүктеңіз.`;
+  $('#upload-success').hidden=false;
+}
+
 document.querySelectorAll('.nav-item').forEach(button=>button.addEventListener('click',()=>showView(button.dataset.view)));
 if (hosted) {
   $('.review-action-row > span').textContent='Vercel-де өңделеді · қолданба сақтамайды';
@@ -212,18 +220,26 @@ $('#buffer').addEventListener('input',()=>{$('#buffer-value').textContent=`${$('
 $('#recalculate').addEventListener('click',()=>update());
 $('#reset-sample').addEventListener('click',async()=>{
   if(await update(null,0)){
+    $('#upload-success').hidden=true;
     $('#buffer').value=0;$('#buffer-value').textContent='0%';$('#csv-file').value='';$('#file-name').textContent='Файл таңдалмады';
   }
 });
 $('#csv-file').addEventListener('change',async(event)=>{
   const file=event.target.files[0];if(!file)return;
-  if(file.size>2_000_000){$('#error').textContent='CSV файлы 2 МБ-тан аспауы керек.';$('#error').hidden=false;event.target.value='';return;}
+  $('#upload-success').hidden=true;
+  if(file.size>2_000_000){$('#error').textContent='CSV файлы 2 МБ-тан аспауы керек.';$('#error').hidden=false;$('#error').scrollIntoView({block:'center'});event.target.value='';return;}
   try {
     const text=await file.text();
-    if(await update(text)){$('#file-name').textContent=file.name;showView('plan');}
-  } catch(error){$('#error').textContent=error.message;$('#error').hidden=false;}
+    if(await update(text)){
+      $('#file-name').textContent=file.name;
+      renderUploadSuccess(file.name,analysis);
+      showView('plan');
+      $('#upload-success').scrollIntoView({block:'start'});
+    } else $('#error').scrollIntoView({block:'center'});
+  } catch(error){$('#error').textContent=error.message;$('#error').hidden=false;$('#error').scrollIntoView({block:'center'});}
   event.target.value='';
 });
+$('#download-plan-ready').addEventListener('click',()=>$('#download-plan').click());
 $('#download-plan').addEventListener('click',()=>{
   if(!analysis)return;
   const rows=[['source','date','product','forecast','recommended','unit_price_kzt','unit_cost_kzt','production_cost_kzt'],...analysis.products.map(p=>[analysis.synthetic?'SYNTHETIC_DEMO':'USER_UPLOADED_UNVERIFIED',analysis.next_date,p.name,p.forecast,p.quantity,p.price,p.cost,p.production_cost])];

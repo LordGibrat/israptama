@@ -13,6 +13,14 @@ Israptama helps small bakeries plan what to bake tomorrow. It forecasts sales by
 - Accepts a sales CSV and exports a baking plan as CSV or an evaluation report as JSON.
 - Includes a separate English recipe-review experiment. The **Пікірлер** view compares two classifiers that flag low-rated reviews. This experiment is independent of the baking plan.
 
+## Presenting the idea
+
+The eight-slide [PowerPoint pitch](presentation/Israptama-Pitch.pptx) and [PDF backup](presentation/Israptama-Pitch.pdf) lead with the bakery owner's two decisions, show the working MVP early, then explain the controlled NLP experiment and its measured tradeoff. [Speaker notes](presentation/NOTES.md) provide a seven-minute English script, a short live-demo path, and answers for 2–3 minutes of Q&A.
+
+The offer is a **guided, opt-in bakery pilot**: use 77 or more consecutive days of baked-and-sold history to try next-day planning, inspect the assumptions, and export a recommendation. The English review classifier is a separate research feature. Real bakery value, waste reduction, and profit improvement still need to be measured. The [browser deck](public/presentation.html) uses the bakery photo and dashboard screenshot in `public/assets/`; keep that directory intact for offline use.
+
+The Vercel project was uploaded manually and is not connected to GitHub. New commits and merges do not update the hosted copy automatically; redeploy and verify the new version before using the live presentation link above.
+
 ## Tech stack
 
 - **Frontend** — HTML, CSS, and vanilla JavaScript in `public/`.
