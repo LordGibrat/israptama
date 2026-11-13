@@ -1,145 +1,69 @@
-# Israptama — bakery production planning prototype
+# Israptama
 
-[![Main branch tests](https://github.com/LordGibrat/israptama/actions/workflows/tests.yml/badge.svg?branch=main)](https://github.com/LordGibrat/israptama/actions/workflows/tests.yml?query=branch%3Amain)
+Israptama helps small bakeries plan what to bake tomorrow. It forecasts sales by product and recommends quantities based on the cost of unsold stock and the margin lost when a product sells out. The dashboard is in Kazakh.
 
-An AI-assisted decision-support prototype for small bakeries in Kazakhstan. It forecasts sales, recommends daily baking quantities, and makes the tradeoff between unsold stock and unmet demand visible. A separate NLP view compares two models that flag low-rated English recipe feedback. The interface is in Kazakh; the documentation is in English.
+[Live demo](https://israptama.vercel.app/) · [Run locally](#run-locally) · [Mobile preview](preview-mobile.png) · [Research presentation](https://israptama.vercel.app/presentation.html)
 
-**Status:** [live prototype on Vercel](https://israptama.vercel.app/) and available for local use. Planning is evaluated on synthetic sales; the separate NLP study uses real open recipe-review text. No real bakery pilot or verified savings yet.
+![Kazakh-language Israptama dashboard showing a sample baking plan and sales forecast](preview-desktop.png)
 
-**Pilot proposition:** A bakery with 77 or more consecutive days of baked-and-sold records can try the next-day plan, inspect the assumptions, and export the recommendation. The review view is a separate English-text research feature. A guided real-bakery pilot must measure usefulness and operating outcomes before a commercial impact claim.
+## What it does
 
-**Assignment 2 source:** [PR #1](https://github.com/LordGibrat/israptama/pull/1) records the NLP implementation and review. Start with the [requirement-by-requirement evidence guide](ASSIGNMENT_EVIDENCE.md) when presenting it.
-
-**Customer discovery:** initial outreach to five bakeries in Astana; responses and real-data validation are pending.
-
-![Israptama bakery planning dashboard](preview-desktop.png)
-
-[Quick start](#quick-start) · [NLP research](#nlp-research-assignment-2-option-a) · [Planning results](#initial-experiment) · [Design direction](DESIGN.md) · [Live presentation](https://israptama.vercel.app/presentation.html) · [Mobile preview](preview-mobile.png)
-
-Independent student project inspired by the publicly described Afresh workflow: sales history → demand forecast → production recommendation → business evaluation. No affiliation with Afresh and no access to its code, models, or customer data.
-
-## What the prototype demonstrates
-
-- A Kazakh-language production-planning dashboard.
-- Product-level Ridge regression with weekday, trend, last-week, and rolling-seven-day features.
-- Cost-sensitive quantity recommendations with an optional 0–20% safety-stock adjustment.
-- A 21-day walk-forward evaluation against a last-week same-day baseline.
-- A transparent comparison of forecast error, simulated contribution profit, and unsold units.
-- CSV upload, plan download, JSON evaluation export, and a reproducible synthetic dataset.
-- A separate interactive review triage view backed by a recipe-disjoint, reproducible NLP experiment; it never changes production recommendations.
-- No account, app telemetry, external inference API, or uploaded-file persistence. The hosted demo processes CSV and review inputs in Vercel Functions; the local run processes them on your machine.
+- Forecasts next-day sales by product and recommends how much to bake, with an optional safety-stock adjustment.
+- Compares a 21-day backtest with a last-week-sales baseline. The dashboard shows forecast error, simulated contribution profit, leftovers, and unmet demand where the synthetic dataset provides demand.
+- Accepts a sales CSV and exports a baking plan as CSV or an evaluation report as JSON.
+- Includes a separate English recipe-review experiment. The **Пікірлер** view compares two classifiers that flag low-rated reviews. This experiment is independent of the baking plan.
 
 ## Presenting the idea
 
-The eight-slide [PowerPoint pitch](presentation/Israptama-Pitch.pptx) and [PDF backup](presentation/Israptama-Pitch.pdf) lead with the bakery owner's two decisions, show the working product early, then explain the controlled NLP experiment and its measured tradeoff. [Speaker notes](presentation/NOTES.md) provide a seven-minute English script, a live-demo path, and concise Q&A answers. The [browser deck](public/presentation.html) is keyboard and touch navigable; the hosted copy updates only after a separate Vercel redeployment.
+The eight-slide [PowerPoint pitch](presentation/Israptama-Pitch.pptx) and [PDF backup](presentation/Israptama-Pitch.pdf) lead with the bakery owner's two decisions, show the working MVP early, then explain the controlled NLP experiment and its measured tradeoff. [Speaker notes](presentation/NOTES.md) provide a seven-minute English script, a short live-demo path, and answers for 2–3 minutes of Q&A.
 
-This is a pitch for a **guided pilot**, not a claim of verified savings. The requested next step is opt-in real bakery data and a comparison against the owner's current routine.
+The offer is a **guided, opt-in bakery pilot**: use 77 or more consecutive days of baked-and-sold history to try next-day planning, inspect the assumptions, and export a recommendation. The English review classifier is a separate research feature. Real bakery value, waste reduction, and profit improvement still need to be measured. The [browser deck](public/presentation.html) uses the bakery photo and dashboard screenshot in `public/assets/`; keep that directory intact for offline use.
 
-## Quick start
+The Vercel project was uploaded manually and is not connected to GitHub. New commits and merges do not update the hosted copy automatically; redeploy and verify the new version before using the live presentation link above.
 
-Requires Python 3.11 or later. Run from the repository root:
+## Tech stack
 
-```bash
+- **Frontend** — HTML, CSS, and vanilla JavaScript in `public/`.
+- **Local server** — Python's standard-library HTTP server in `app.py`. The hosted demo uses the same API through a Vercel Python Function.
+- **Forecasting and planning** — NumPy for Ridge regression, with price and unit cost used to choose a production quantity.
+- **Review experiment** — scikit-learn for TF-IDF and logistic regression, with model artifacts loaded via joblib.
+
+## Run locally
+
+Install Git and Python 3.11 or 3.12. The demo runs without an account, API key or frontend build.
+
+```sh
+git clone https://github.com/LordGibrat/israptama.git
+cd israptama
 python -m venv .venv
 ```
 
-Activate with `.venv\Scripts\Activate.ps1` on Windows PowerShell or `source .venv/bin/activate` on macOS/Linux, then:
+**Windows PowerShell**
 
-```bash
-python -m pip install -r requirements.txt
-python app.py
+```powershell
+.\.venv\Scripts\python.exe -m pip install -r requirements.txt
+.\.venv\Scripts\python.exe app.py
 ```
 
-Open [http://localhost:8765](http://localhost:8765). No API key or account is required. Keep the terminal running. Stop with Ctrl+C.
+**macOS / Linux**
 
-Select **Пікірлер** for the English review experiment. The two example comments are invented for the interface, while the displayed evaluation figures come from the real open dataset. Review text is processed in memory and is not saved by the app. On the hosted demo it is sent to Vercel for processing; on localhost it stays on your machine.
-
-## Vercel deployment
-
-The [live demo](https://israptama.vercel.app/) serves only the files in `public/` and runs the API through `api/index.py` as a Python Function. CSV and review text are sent to that function and processed in memory; the app does not save them. Use the synthetic sample for a public demonstration and run locally for private bakery data. The hosted site needs no account or API key.
-
-`vercel.json` maps the six API paths to the shared Python handler, keeps research model artifacts in the function bundle, and applies security headers to static files. The original `python app.py` workflow remains available.
-
-The current Vercel project was published by uploading the feature-branch source files. It is not connected to the GitHub repository, so new commits do not deploy automatically; redeploy the updated source or grant the Vercel Git integration access to `LordGibrat/israptama` first.
-
-## NLP research (Assignment #2, Option A)
-
-The study uses the [UCI Recipe Reviews and User Feedback dataset](https://archive.ics.uci.edu/dataset/911/recipe+reviews+and+user+feedback+dataset) (CC BY 4.0). It predicts **1–3 versus 4–5-star ratings** from English review text on 38 bakery-like recipes. After cleaning, 5,984 reviews remain. Recipe groups are separated into train (25 recipes), validation (6), and untouched test (7); identical normalized text is removed before splitting. Both arms use the same class-weighted logistic regression. The changed arm adds character 3–5-gram TF-IDF to a word-unigram baseline.
-
-On 1,174 held-out reviews, low-rating F1 was **0.493** for words only and **0.511** with character features; average precision was **0.518** and **0.558**, respectively. The F1 gain is uncertain: a recipe-cluster bootstrap 95% interval for the difference is **−0.066 to +0.080**. The baseline is the live headline model because its validation F1 was marginally higher; the interface exposes both. These results do not measure bakery demand or validate Kazakh reviews.
-
-Reproduce the experiment after installing `requirements.txt`:
-
-```bash
-python research/run_experiment.py --check
+```sh
+.venv/bin/python -m pip install -r requirements.txt
+.venv/bin/python app.py
 ```
 
-This downloads and checksum-checks the 2.1 MB UCI archive, retrains both models, and checks the recorded split and metrics. See [NLP_RESEARCH.md](NLP_RESEARCH.md) for the full protocol, confusion matrices, limitations, source attribution, and artifacts. For offline presentation, keep the entire `public/` directory together so the deck's bakery photo and dashboard screenshot load, or use the portable PowerPoint and PDF files above.
+Open [http://127.0.0.1:8765](http://127.0.0.1:8765). The synthetic sample loads automatically. Select **Нәтижелер** to compare the backtest, **Деректер** to import a CSV, or **Пікірлер** to try a sample English review. Stop the server with Ctrl+C.
 
-## Initial experiment
+For CSV imports, use UTF-8 with the columns `date,product,baked,sold,price,cost`. Each product needs 77–730 consecutive daily records and the same ending date. Use one row per date and product, integer quantities with `sold ≤ baked`, and prices with `0 < cost < price`. The file can contain up to 20 products, 15,000 rows and 2 MB. Download the full synthetic sample from **Деректер** for a valid example. On the hosted demo, inputs are processed in memory by a Vercel Function. Run locally when working with private bakery data.
 
-Evaluated on 336 synthetic records across three products, using a 21-day walk-forward test:
+## Results and reproducibility
 
-| Measure | Last-week-sales baseline | Israptama |
-|---|---:|---:|
-| Forecast WAPE (lower is better) | 8.44% | 7.55% |
-| Simulated contribution profit | 1,605,170 ₸ | 1,631,890 ₸ |
-| Simulated unsold units | 69 | 85 |
+The planning evaluation uses synthetic sales. It produced higher simulated contribution profit than the baseline and also more unsold units. Uploaded sales can understate demand on stockout days. See [planning results and assumptions](RESULTS.md) for the measured tradeoff and [the project notes](PROJECT_NOTES.md) for validation status.
 
-Profit increased in the simulation, but waste also increased. These results demonstrate the tradeoff, not real-world waste reduction. See [RESULTS.md](RESULTS.md) for assumptions and the full comparison.
+The separate NLP study uses the [UCI Recipe Reviews and User Feedback dataset](https://archive.ics.uci.edu/dataset/911/recipe+reviews+and+user+feedback+dataset) under CC BY 4.0. Its held-out evaluation measures low-rating classification on English reviews. See [the research protocol and results](NLP_RESEARCH.md) and [assignment evidence](ASSIGNMENT_EVIDENCE.md).
 
-## CSV input
+In the virtual environment, run `python -m unittest discover -s tests -v` for unit and HTTP tests, or `python research/run_experiment.py --check` to download the UCI archive and reproduce the NLP experiment.
 
-```csv
-date,product,baked,sold,price,cost
-2026-07-01,Нан,100,85,400,160
-```
+[Design notes](DESIGN.md) · [Presentation notes](presentation/NOTES.md) · [Test workflow](https://github.com/LordGibrat/israptama/actions/workflows/tests.yml)
 
-Each product needs 77–730 consecutive daily records; all products must end on the same date. One row per date/product. Maximum 20 products, 15,000 rows, 2 MB. Use UTF-8 (BOM accepted), comma or semicolon delimiters, dot decimals, nonnegative integer quantities with sold ≤ baked, and 0 < cost < price. Quantities ≤ 1 million and unit money values ≤ 1 billion ₸. Do not invent zero sales for a missing record. The downloadable one-row template describes the schema; it is not sufficient training data.
-
-The sample export also has `data_source=SYNTHETIC_DEMO`. Preserve this provenance. Its CSV contains only observable sales and production; latent demand is intentionally not exported. Re-uploading it runs an observed-sales scenario, so its metrics differ from the built-in simulation with known fictional demand. User uploads are not independently verified as real data.
-
-## Honest evaluation
-
-For each prediction date, only earlier rows are visible. The last 14 prior days are reserved for residual calibration; the remaining usable prior days train the regression. Features for each training/calibration row use only rows before that date. Calibration retains all observed-sales residuals, including stockouts, to avoid selecting only lower-demand days. This is not a censoring-aware latent-demand estimator; historic stockouts can still cause demand to be underestimated.
-
-The sample's hidden demand is used only as the evaluation target, never for training or planning. Real CSV demand is unknown: observed sales are a lower bound when a product sells out. Accordingly, real uploads show a **scenario against observed sales**, not verified lost sales or savings. WAPE is absolute forecast error divided by total evaluation demand (or observed sales); lower is better. It is not an “accuracy percentage.” The 10–90% residual range is descriptive, not a guaranteed prediction interval.
-
-Daily contribution profit = `min(quantity, demand) × price − quantity × unit cost`. All unsold items incur production cost. Assume no carryover, salvage revenue, substitutions, or capacity limits. Rent, wages, tax, other fixed costs, promotions, weather, and holidays are excluded. Model improvements on synthetic data do not establish real-world effectiveness. A model can lose to the baseline; the app reports that honestly.
-
-## Reproduce
-
-```text
-python -m unittest discover -s tests -v
-python prepare_demo.py
-```
-
-`data/SYNTHETIC-evaluation.json` contains exact row-level evaluation. `RESULTS.md` explains the initial result. Python compilation and JavaScript syntax were checked; desktop and mobile browser interactions were exercised.
-
-## Next: bakery replies
-
-1. Record interview responses separately, with consent; do not put private contacts in the repository.
-2. Request daily baked/sold counts for 2–3 products, prices/costs, and dates. If the owner has less history, report the limitation and retain the demo rather than pretending to validate a model.
-3. Import the anonymized CSV. Clarify stockouts and how leftovers are handled.
-4. Show the recommendations to the owner; record feedback.
-5. Describe verified interviews, prototype work, and simulated results separately in the application. Attribute AI assistance and explain the methodology yourself.
-
-Public inspiration: https://www.afresh.com/departments/bakery
-
-## Repository guide
-
-- `engine.py`: validation, Ridge forecasting, cost-sensitive production planning, evaluation.
-- `app.py`: shared HTTP API and localhost server; CSV input is processed in memory.
-- `api/index.py`, `vercel.json`: Vercel function entry point and routing/security configuration.
-- `public/`: responsive Kazakh UI, styles, original artwork, and the self-contained presentation served as static files.
-- `tests/`: forecasting, research-protocol and HTTP integration tests.
-- `review_model.py`, `research/`: text-only classifier, reproducible experiment, model artifacts and measured results.
-- `NLP_RESEARCH.md`: research protocol, results, attribution and limitations.
-- `presentation/`: speaker notes and Q&A for `public/presentation.html`.
-- `data/`: explicitly labeled synthetic data and evaluation results.
-- `.github/workflows/tests.yml`: automated test configuration for GitHub, with action versions pinned to verified commit hashes. View runs in the repository's Actions tab.
-- [DESIGN.md](DESIGN.md): visual references and artwork attribution.
-- [PROJECT_NOTES.md](PROJECT_NOTES.md): development transparency and project status.
-- [GITHUB_UPLOAD.md](GITHUB_UPLOAD.md): upload instructions and suggested repository description.
-
-No license has been selected yet; this repository does not grant an explicit open-source reuse license.
+Independent student prototype inspired by [Afresh’s public bakery workflow](https://www.afresh.com/departments/bakery). No license has been selected for this repository.
